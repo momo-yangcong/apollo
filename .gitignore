@@ -26,4 +26,6 @@ target
 # git
 *.orig
 .flattened-pom.xml
+*/target
+/target
 
