@@ -19,90 +19,89 @@ package com.ctrip.framework.apollo.openapi.v1.controller;
 import com.ctrip.framework.apollo.common.dto.ClusterDTO;
 import com.ctrip.framework.apollo.common.entity.App;
 import com.ctrip.framework.apollo.common.utils.BeanUtils;
-import com.ctrip.framework.apollo.openapi.entity.ConsumerRole;
-import com.ctrip.framework.apollo.openapi.service.ConsumerService;
-import com.ctrip.framework.apollo.openapi.util.ConsumerAuthUtil;
-import com.ctrip.framework.apollo.portal.environment.Env;
 import com.ctrip.framework.apollo.openapi.dto.OpenAppDTO;
 import com.ctrip.framework.apollo.openapi.dto.OpenEnvClusterDTO;
+import com.ctrip.framework.apollo.openapi.service.ConsumerService;
+import com.ctrip.framework.apollo.openapi.util.ConsumerAuthUtil;
 import com.ctrip.framework.apollo.openapi.util.OpenApiBeanUtils;
 import com.ctrip.framework.apollo.portal.component.PortalSettings;
+import com.ctrip.framework.apollo.portal.environment.Env;
 import com.ctrip.framework.apollo.portal.service.AppService;
 import com.ctrip.framework.apollo.portal.service.ClusterService;
 import com.google.common.collect.Sets;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @RestController("openapiAppController")
 @RequestMapping("/openapi/v1")
 public class AppController {
 
-  private final PortalSettings portalSettings;
-  private final ClusterService clusterService;
-  private final AppService appService;
-  private final ConsumerAuthUtil consumerAuthUtil;
-  private final ConsumerService consumerService;
+    private final PortalSettings portalSettings;
+    private final ClusterService clusterService;
+    private final AppService appService;
+    private final ConsumerAuthUtil consumerAuthUtil;
+    private final ConsumerService consumerService;
 
-  public AppController(final PortalSettings portalSettings,
-      final ClusterService clusterService,
-      final AppService appService,
-      final ConsumerAuthUtil consumerAuthUtil,
-      final ConsumerService consumerService) {
-    this.portalSettings = portalSettings;
-    this.clusterService = clusterService;
-    this.appService = appService;
-    this.consumerAuthUtil = consumerAuthUtil;
-    this.consumerService = consumerService;
-  }
-
-  @GetMapping(value = "/apps/{appId}/envclusters")
-  public List<OpenEnvClusterDTO> loadEnvClusterInfo(@PathVariable String appId){
-
-    List<OpenEnvClusterDTO> envClusters = new LinkedList<>();
-
-    List<Env> envs = portalSettings.getActiveEnvs();
-    for (Env env : envs) {
-      OpenEnvClusterDTO envCluster = new OpenEnvClusterDTO();
-
-      envCluster.setEnv(env.getName());
-      List<ClusterDTO> clusterDTOs = clusterService.findClusters(env, appId);
-      envCluster.setClusters(BeanUtils.toPropertySet("name", clusterDTOs));
-
-      envClusters.add(envCluster);
+    public AppController(final PortalSettings portalSettings,
+                         final ClusterService clusterService,
+                         final AppService appService,
+                         final ConsumerAuthUtil consumerAuthUtil,
+                         final ConsumerService consumerService) {
+        this.portalSettings = portalSettings;
+        this.clusterService = clusterService;
+        this.appService = appService;
+        this.consumerAuthUtil = consumerAuthUtil;
+        this.consumerService = consumerService;
     }
 
-    return envClusters;
+    @GetMapping(value = "/apps/{appId}/envclusters")
+    public List<OpenEnvClusterDTO> loadEnvClusterInfo(@PathVariable String appId) {
 
-  }
+        List<OpenEnvClusterDTO> envClusters = new LinkedList<>();
 
-  @GetMapping("/apps")
-  public List<OpenAppDTO> findApps(@RequestParam(value = "appIds", required = false) String appIds) {
-    final List<App> apps = new ArrayList<>();
-    if (!StringUtils.hasLength(appIds)) {
-      apps.addAll(appService.findAll());
-    } else {
-      apps.addAll(appService.findByAppIds(Sets.newHashSet(appIds.split(","))));
+        List<Env> envs = portalSettings.getActiveEnvs();
+        for (Env env : envs) {
+            OpenEnvClusterDTO envCluster = new OpenEnvClusterDTO();
+
+            envCluster.setEnv(env.getName());
+            List<ClusterDTO> clusterDTOs = clusterService.findClusters(env, appId);
+            envCluster.setClusters(BeanUtils.toPropertySet("name", clusterDTOs));
+
+            envClusters.add(envCluster);
+        }
+
+        return envClusters;
+
     }
-    return OpenApiBeanUtils.transformFromApps(apps);
-  }
 
-  /**
-   * @return which apps can be operated by open api
-   */
-  @GetMapping("/apps/authorized")
-  public List<OpenAppDTO> findAppsAuthorized(HttpServletRequest request) {
-    long consumerId = this.consumerAuthUtil.retrieveConsumerId(request);
+    @GetMapping("/apps")
+    public List<OpenAppDTO> findApps(@RequestParam(value = "appIds", required = false) String appIds) {
+        final List<App> apps = new ArrayList<>();
+        if (!StringUtils.hasLength(appIds)) {
+            apps.addAll(appService.findAll());
+        } else {
+            apps.addAll(appService.findByAppIds(Sets.newHashSet(appIds.split(","))));
+        }
+        return OpenApiBeanUtils.transformFromApps(apps);
+    }
 
-    Set<String> appIds = this.consumerService.findAppIdsAuthorizedByConsumerId(consumerId);
+    /**
+     * @return which apps can be operated by open api
+     */
+    @GetMapping("/apps/authorized")
+    public List<OpenAppDTO> findAppsAuthorized(HttpServletRequest request) {
+        long consumerId = this.consumerAuthUtil.retrieveConsumerId(request);
 
-    List<App> apps = this.appService.findByAppIds(appIds);
-    return OpenApiBeanUtils.transformFromApps(apps);
-  }
+        Set<String> appIds = this.consumerService.findAppIdsAuthorizedByConsumerId(consumerId);
+
+        List<App> apps = this.appService.findByAppIds(appIds);
+        return OpenApiBeanUtils.transformFromApps(apps);
+    }
 
 }

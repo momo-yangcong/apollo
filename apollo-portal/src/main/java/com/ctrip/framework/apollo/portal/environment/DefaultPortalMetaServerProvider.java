@@ -16,8 +16,6 @@
  */
 package com.ctrip.framework.apollo.portal.environment;
 
-import static com.ctrip.framework.apollo.portal.environment.Env.transformToEnvMap;
-
 import com.ctrip.framework.apollo.core.utils.ResourceUtils;
 import com.ctrip.framework.apollo.portal.util.KeyValueUtils;
 import org.slf4j.Logger;
@@ -27,15 +25,18 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.ctrip.framework.apollo.portal.environment.Env.transformToEnvMap;
+
 /**
  * Only use in apollo-portal
  * load all meta server address from
- *  - System Property           [key ends with "_meta" (case insensitive)]
- *  - OS environment variable   [key ends with "_meta" (case insensitive)]
- *  - user's configuration file [key ends with ".meta" (case insensitive)]
+ * - System Property           [key ends with "_meta" (case insensitive)]
+ * - OS environment variable   [key ends with "_meta" (case insensitive)]
+ * - user's configuration file [key ends with ".meta" (case insensitive)]
  * when apollo-portal start up.
- * @see com.ctrip.framework.apollo.core.internals.LegacyMetaServerProvider
+ *
  * @author wxq
+ * @see com.ctrip.framework.apollo.core.internals.LegacyMetaServerProvider
  */
 class DefaultPortalMetaServerProvider implements PortalMetaServerProvider {
 
@@ -50,7 +51,7 @@ class DefaultPortalMetaServerProvider implements PortalMetaServerProvider {
     private volatile Map<Env, String> domains;
 
     DefaultPortalMetaServerProvider() {
-      reload();
+        reload();
     }
 
     @Override

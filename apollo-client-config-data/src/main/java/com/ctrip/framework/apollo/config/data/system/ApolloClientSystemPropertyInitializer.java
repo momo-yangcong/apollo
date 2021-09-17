@@ -29,31 +29,31 @@ import org.springframework.util.StringUtils;
  */
 public class ApolloClientSystemPropertyInitializer {
 
-  private final Log log;
+    private final Log log;
 
-  public ApolloClientSystemPropertyInitializer(Log log) {
-    this.log = log;
-  }
+    public ApolloClientSystemPropertyInitializer(Log log) {
+        this.log = log;
+    }
 
-  public void initializeSystemProperty(Binder binder, BindHandler bindHandler) {
-    for (String propertyName : ApolloApplicationContextInitializer.APOLLO_SYSTEM_PROPERTIES) {
-      this.fillSystemPropertyFromBinder(propertyName, propertyName, binder, bindHandler);
+    public void initializeSystemProperty(Binder binder, BindHandler bindHandler) {
+        for (String propertyName : ApolloApplicationContextInitializer.APOLLO_SYSTEM_PROPERTIES) {
+            this.fillSystemPropertyFromBinder(propertyName, propertyName, binder, bindHandler);
+        }
     }
-  }
 
-  private void fillSystemPropertyFromBinder(String propertyName, String bindName, Binder binder,
-      BindHandler bindHandler) {
-    if (System.getProperty(propertyName) != null) {
-      return;
+    private void fillSystemPropertyFromBinder(String propertyName, String bindName, Binder binder,
+                                              BindHandler bindHandler) {
+        if (System.getProperty(propertyName) != null) {
+            return;
+        }
+        String propertyValue = binder.bind(bindName, Bindable.of(String.class), bindHandler)
+                .orElse(null);
+        if (!StringUtils.hasText(propertyValue)) {
+            return;
+        }
+        log.debug(Slf4jLogMessageFormatter
+                .format("apollo client set system property key=[{}] value=[{}]", propertyName,
+                        propertyValue));
+        System.setProperty(propertyName, propertyValue);
     }
-    String propertyValue = binder.bind(bindName, Bindable.of(String.class), bindHandler)
-        .orElse(null);
-    if (!StringUtils.hasText(propertyValue)) {
-      return;
-    }
-    log.debug(Slf4jLogMessageFormatter
-        .format("apollo client set system property key=[{}] value=[{}]", propertyName,
-            propertyValue));
-    System.setProperty(propertyName, propertyValue);
-  }
 }

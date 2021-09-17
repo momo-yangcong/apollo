@@ -16,13 +16,11 @@
  */
 package com.ctrip.framework.apollo.adminservice.controller;
 
-import com.google.gson.Gson;
-
 import com.ctrip.framework.apollo.biz.service.AdminService;
 import com.ctrip.framework.apollo.biz.service.AppService;
 import com.ctrip.framework.apollo.common.dto.AppDTO;
 import com.ctrip.framework.apollo.common.entity.App;
-
+import com.google.gson.Gson;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -42,61 +40,57 @@ import static org.mockito.Mockito.when;
 
 public class ControllerIntegrationExceptionTest extends AbstractControllerTest {
 
-  @Autowired
-  AppController appController;
+    private static final Gson GSON = new Gson();
+    @Autowired
+    AppController appController;
+    @Mock
+    AdminService adminService;
+    @Autowired
+    AppService appService;
+    private Object realAdminService;
 
-  @Mock
-  AdminService adminService;
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
 
-  private Object realAdminService;
+        realAdminService = ReflectionTestUtils.getField(appController, "adminService");
 
-  @Autowired
-  AppService appService;
-
-  private static final Gson GSON = new Gson();
-
-  @Before
-  public void setUp() {
-    MockitoAnnotations.initMocks(this);
-
-    realAdminService = ReflectionTestUtils.getField(appController, "adminService");
-
-    ReflectionTestUtils.setField(appController, "adminService", adminService);
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    ReflectionTestUtils.setField(appController, "adminService", realAdminService);
-  }
-
-  private String getBaseAppUrl() {
-    return "http://localhost:" + port + "/apps/";
-  }
-
-  @Test
-  @Sql(scripts = "/controller/cleanup.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
-  public void testCreateFailed() {
-    AppDTO dto = generateSampleDTOData();
-
-    when(adminService.createNewApp(any(App.class))).thenThrow(new RuntimeException("save failed"));
-
-    try {
-      restTemplate.postForEntity(getBaseAppUrl(), dto, AppDTO.class);
-    } catch (HttpStatusCodeException e) {
-      @SuppressWarnings("unchecked")
-      Map<String, String> attr = GSON.fromJson(e.getResponseBodyAsString(), Map.class);
-      Assert.assertEquals("save failed", attr.get("message"));
+        ReflectionTestUtils.setField(appController, "adminService", adminService);
     }
-    App savedApp = appService.findOne(dto.getAppId());
-    Assert.assertNull(savedApp);
-  }
 
-  private AppDTO generateSampleDTOData() {
-    AppDTO dto = new AppDTO();
-    dto.setAppId("someAppId");
-    dto.setName("someName");
-    dto.setOwnerName("someOwner");
-    dto.setOwnerEmail("someOwner@ctrip.com");
-    return dto;
-  }
+    @After
+    public void tearDown() throws Exception {
+        ReflectionTestUtils.setField(appController, "adminService", realAdminService);
+    }
+
+    private String getBaseAppUrl() {
+        return "http://localhost:" + port + "/apps/";
+    }
+
+    @Test
+    @Sql(scripts = "/controller/cleanup.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
+    public void testCreateFailed() {
+        AppDTO dto = generateSampleDTOData();
+
+        when(adminService.createNewApp(any(App.class))).thenThrow(new RuntimeException("save failed"));
+
+        try {
+            restTemplate.postForEntity(getBaseAppUrl(), dto, AppDTO.class);
+        } catch (HttpStatusCodeException e) {
+            @SuppressWarnings("unchecked")
+            Map<String, String> attr = GSON.fromJson(e.getResponseBodyAsString(), Map.class);
+            Assert.assertEquals("save failed", attr.get("message"));
+        }
+        App savedApp = appService.findOne(dto.getAppId());
+        Assert.assertNull(savedApp);
+    }
+
+    private AppDTO generateSampleDTOData() {
+        AppDTO dto = new AppDTO();
+        dto.setAppId("someAppId");
+        dto.setName("someName");
+        dto.setOwnerName("someOwner");
+        dto.setOwnerEmail("someOwner@ctrip.com");
+        return dto;
+    }
 }

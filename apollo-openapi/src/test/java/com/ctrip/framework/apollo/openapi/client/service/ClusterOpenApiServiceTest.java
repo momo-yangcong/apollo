@@ -16,11 +16,6 @@
  */
 package com.ctrip.framework.apollo.openapi.client.service;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.ctrip.framework.apollo.openapi.dto.OpenClusterDTO;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -31,90 +26,93 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
+
 public class ClusterOpenApiServiceTest extends AbstractOpenApiServiceTest {
 
-  private ClusterOpenApiService clusterOpenApiService;
+    private ClusterOpenApiService clusterOpenApiService;
 
-  private String someAppId;
-  private String someEnv;
+    private String someAppId;
+    private String someEnv;
 
-  @Before
-  public void setUp() throws Exception {
-    super.setUp();
-    someAppId = "someAppId";
-    someEnv = "someEnv";
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        someAppId = "someAppId";
+        someEnv = "someEnv";
 
-    StringEntity responseEntity = new StringEntity("{}");
-    when(someHttpResponse.getEntity()).thenReturn(responseEntity);
+        StringEntity responseEntity = new StringEntity("{}");
+        when(someHttpResponse.getEntity()).thenReturn(responseEntity);
 
-    clusterOpenApiService = new ClusterOpenApiService(httpClient, someBaseUrl, gson);
-  }
+        clusterOpenApiService = new ClusterOpenApiService(httpClient, someBaseUrl, gson);
+    }
 
-  @Test
-  public void testGetCluster() throws Exception {
-    String someCluster = "someCluster";
+    @Test
+    public void testGetCluster() throws Exception {
+        String someCluster = "someCluster";
 
-    final ArgumentCaptor<HttpGet> request = ArgumentCaptor.forClass(HttpGet.class);
+        final ArgumentCaptor<HttpGet> request = ArgumentCaptor.forClass(HttpGet.class);
 
-    clusterOpenApiService.getCluster(someAppId, someEnv, someCluster);
+        clusterOpenApiService.getCluster(someAppId, someEnv, someCluster);
 
-    verify(httpClient, times(1)).execute(request.capture());
+        verify(httpClient, times(1)).execute(request.capture());
 
-    HttpGet get = request.getValue();
+        HttpGet get = request.getValue();
 
-    assertEquals(String
-            .format("%s/envs/%s/apps/%s/clusters/%s", someBaseUrl, someEnv, someAppId, someCluster),
-        get.getURI().toString());
-  }
+        assertEquals(String
+                        .format("%s/envs/%s/apps/%s/clusters/%s", someBaseUrl, someEnv, someAppId, someCluster),
+                get.getURI().toString());
+    }
 
-  @Test(expected = RuntimeException.class)
-  public void testGetClusterWithError() throws Exception {
-    String someCluster = "someCluster";
+    @Test(expected = RuntimeException.class)
+    public void testGetClusterWithError() throws Exception {
+        String someCluster = "someCluster";
 
-    when(statusLine.getStatusCode()).thenReturn(404);
+        when(statusLine.getStatusCode()).thenReturn(404);
 
-    clusterOpenApiService.getCluster(someAppId, someEnv, someCluster);
-  }
+        clusterOpenApiService.getCluster(someAppId, someEnv, someCluster);
+    }
 
-  @Test
-  public void testCreateCluster() throws Exception {
-    String someCluster = "someCluster";
-    String someCreatedBy = "someCreatedBy";
+    @Test
+    public void testCreateCluster() throws Exception {
+        String someCluster = "someCluster";
+        String someCreatedBy = "someCreatedBy";
 
-    OpenClusterDTO clusterDTO = new OpenClusterDTO();
-    clusterDTO.setAppId(someAppId);
-    clusterDTO.setName(someCluster);
-    clusterDTO.setDataChangeCreatedBy(someCreatedBy);
+        OpenClusterDTO clusterDTO = new OpenClusterDTO();
+        clusterDTO.setAppId(someAppId);
+        clusterDTO.setName(someCluster);
+        clusterDTO.setDataChangeCreatedBy(someCreatedBy);
 
-    final ArgumentCaptor<HttpPost> request = ArgumentCaptor.forClass(HttpPost.class);
+        final ArgumentCaptor<HttpPost> request = ArgumentCaptor.forClass(HttpPost.class);
 
-    clusterOpenApiService.createCluster(someEnv, clusterDTO);
+        clusterOpenApiService.createCluster(someEnv, clusterDTO);
 
-    verify(httpClient, times(1)).execute(request.capture());
+        verify(httpClient, times(1)).execute(request.capture());
 
-    HttpPost post = request.getValue();
+        HttpPost post = request.getValue();
 
-    assertEquals(String
-        .format("%s/envs/%s/apps/%s/clusters", someBaseUrl, someEnv, someAppId), post.getURI().toString());
+        assertEquals(String
+                .format("%s/envs/%s/apps/%s/clusters", someBaseUrl, someEnv, someAppId), post.getURI().toString());
 
-    StringEntity entity = (StringEntity) post.getEntity();
+        StringEntity entity = (StringEntity) post.getEntity();
 
-    assertEquals(ContentType.APPLICATION_JSON.toString(), entity.getContentType().getValue());
-    assertEquals(gson.toJson(clusterDTO), EntityUtils.toString(entity));
-  }
+        assertEquals(ContentType.APPLICATION_JSON.toString(), entity.getContentType().getValue());
+        assertEquals(gson.toJson(clusterDTO), EntityUtils.toString(entity));
+    }
 
-  @Test(expected = RuntimeException.class)
-  public void testCreateClusterWithError() throws Exception {
-    String someCluster = "someCluster";
-    String someCreatedBy = "someCreatedBy";
+    @Test(expected = RuntimeException.class)
+    public void testCreateClusterWithError() throws Exception {
+        String someCluster = "someCluster";
+        String someCreatedBy = "someCreatedBy";
 
-    OpenClusterDTO clusterDTO = new OpenClusterDTO();
-    clusterDTO.setAppId(someAppId);
-    clusterDTO.setName(someCluster);
-    clusterDTO.setDataChangeCreatedBy(someCreatedBy);
+        OpenClusterDTO clusterDTO = new OpenClusterDTO();
+        clusterDTO.setAppId(someAppId);
+        clusterDTO.setName(someCluster);
+        clusterDTO.setDataChangeCreatedBy(someCreatedBy);
 
-    when(statusLine.getStatusCode()).thenReturn(400);
+        when(statusLine.getStatusCode()).thenReturn(400);
 
-    clusterOpenApiService.createCluster(someEnv, clusterDTO);
-  }
+        clusterOpenApiService.createCluster(someEnv, clusterDTO);
+    }
 }

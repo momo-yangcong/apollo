@@ -16,7 +16,7 @@ public class TaskService {
     @Autowired
     private TaskExecutor taskExecutor;
 
-    public String task(){
+    public String task() {
         log.info("task service start.");
         try {
             Thread.sleep(1000);
@@ -26,6 +26,7 @@ public class TaskService {
         log.info("task service end.");
         return "complete";
     }
+
     @Async("taskExecutor")
     public CompletableFuture<CommonResult<String>> asyncTask() {
         log.info("task service start.");

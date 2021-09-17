@@ -32,36 +32,36 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = ApolloClientPropertyCompatibleTestConfiguration.class,
-    webEnvironment = SpringBootTest.WebEnvironment.NONE)
+        webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class ApolloClientSystemPropertiesCompatibleTest {
 
-  @Autowired
-  private ConfigurableEnvironment environment;
+    @Autowired
+    private ConfigurableEnvironment environment;
 
-  @Test
-  public void testSystemPropertiesCompatible() {
-    System.setProperty(ApolloClientSystemConsts.DEPRECATED_APOLLO_CACHE_DIR, "test-3/cacheDir");
-    System
-        .setProperty(ApolloClientSystemConsts.DEPRECATED_APOLLO_ACCESS_KEY_SECRET, "test-3-secret");
-    System.setProperty(ApolloClientSystemConsts.DEPRECATED_APOLLO_CONFIG_SERVICE,
-        "https://test-3-config-service");
+    @Test
+    public void testSystemPropertiesCompatible() {
+        System.setProperty(ApolloClientSystemConsts.DEPRECATED_APOLLO_CACHE_DIR, "test-3/cacheDir");
+        System
+                .setProperty(ApolloClientSystemConsts.DEPRECATED_APOLLO_ACCESS_KEY_SECRET, "test-3-secret");
+        System.setProperty(ApolloClientSystemConsts.DEPRECATED_APOLLO_CONFIG_SERVICE,
+                "https://test-3-config-service");
 
-    Assert.assertEquals("test-3/cacheDir",
-        this.environment.getProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR));
-    Assert.assertEquals("test-3-secret",
-        this.environment.getProperty(ApolloClientSystemConsts.APOLLO_ACCESS_KEY_SECRET));
-    Assert.assertEquals("https://test-3-config-service",
-        this.environment.getProperty(ApolloClientSystemConsts.APOLLO_CONFIG_SERVICE));
+        Assert.assertEquals("test-3/cacheDir",
+                this.environment.getProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR));
+        Assert.assertEquals("test-3-secret",
+                this.environment.getProperty(ApolloClientSystemConsts.APOLLO_ACCESS_KEY_SECRET));
+        Assert.assertEquals("https://test-3-config-service",
+                this.environment.getProperty(ApolloClientSystemConsts.APOLLO_CONFIG_SERVICE));
 
-    System.clearProperty(ApolloClientSystemConsts.DEPRECATED_APOLLO_CACHE_DIR);
-    System.clearProperty(ApolloClientSystemConsts.DEPRECATED_APOLLO_ACCESS_KEY_SECRET);
-    System.clearProperty(ApolloClientSystemConsts.DEPRECATED_APOLLO_CONFIG_SERVICE);
-  }
-
-  @After
-  public void clearProperty() {
-    for (String propertyName : ApolloApplicationContextInitializer.APOLLO_SYSTEM_PROPERTIES) {
-      System.clearProperty(propertyName);
+        System.clearProperty(ApolloClientSystemConsts.DEPRECATED_APOLLO_CACHE_DIR);
+        System.clearProperty(ApolloClientSystemConsts.DEPRECATED_APOLLO_ACCESS_KEY_SECRET);
+        System.clearProperty(ApolloClientSystemConsts.DEPRECATED_APOLLO_CONFIG_SERVICE);
     }
-  }
+
+    @After
+    public void clearProperty() {
+        for (String propertyName : ApolloApplicationContextInitializer.APOLLO_SYSTEM_PROPERTIES) {
+            System.clearProperty(propertyName);
+        }
+    }
 }

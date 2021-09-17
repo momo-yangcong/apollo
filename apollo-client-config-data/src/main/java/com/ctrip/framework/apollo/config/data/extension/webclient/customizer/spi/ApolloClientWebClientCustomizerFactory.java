@@ -30,18 +30,18 @@ import org.springframework.lang.Nullable;
  */
 public interface ApolloClientWebClientCustomizerFactory extends Ordered {
 
-  /**
-   * create a WebClientCustomizer instance
-   *
-   * @param apolloClientProperties apollo client binded properties
-   * @param binder                 properties binder
-   * @param bindHandler            properties binder Handler
-   * @param log                    deferred log
-   * @param bootstrapContext       bootstrapContext
-   * @return WebClientCustomizer instance or null
-   */
-  @Nullable
-  WebClientCustomizer createWebClientCustomizer(ApolloClientProperties apolloClientProperties,
-      Binder binder, BindHandler bindHandler, Log log,
-      ConfigurableBootstrapContext bootstrapContext);
+    /**
+     * create a WebClientCustomizer instance
+     *
+     * @param apolloClientProperties apollo client binded properties
+     * @param binder                 properties binder
+     * @param bindHandler            properties binder Handler
+     * @param log                    deferred log
+     * @param bootstrapContext       bootstrapContext
+     * @return WebClientCustomizer instance or null
+     */
+    @Nullable
+    WebClientCustomizer createWebClientCustomizer(ApolloClientProperties apolloClientProperties,
+                                                  Binder binder, BindHandler bindHandler, Log log,
+                                                  ConfigurableBootstrapContext bootstrapContext);
 }

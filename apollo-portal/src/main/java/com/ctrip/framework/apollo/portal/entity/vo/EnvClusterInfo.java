@@ -22,27 +22,27 @@ import com.ctrip.framework.apollo.portal.environment.Env;
 import java.util.List;
 
 public class EnvClusterInfo {
-  private String env;
-  private List<ClusterDTO> clusters;
+    private String env;
+    private List<ClusterDTO> clusters;
 
-  public EnvClusterInfo(Env env) {
-    this.env = env.toString();
-  }
+    public EnvClusterInfo(Env env) {
+        this.env = env.toString();
+    }
 
-  public Env getEnv() {
-    return Env.valueOf(env);
-  }
+    public Env getEnv() {
+        return Env.valueOf(env);
+    }
 
-  public void setEnv(Env env) {
-    this.env = env.toString();
-  }
+    public void setEnv(Env env) {
+        this.env = env.toString();
+    }
 
-  public List<ClusterDTO> getClusters() {
-    return clusters;
-  }
+    public List<ClusterDTO> getClusters() {
+        return clusters;
+    }
 
-  public void setClusters(List<ClusterDTO> clusters) {
-    this.clusters = clusters;
-  }
+    public void setClusters(List<ClusterDTO> clusters) {
+        this.clusters = clusters;
+    }
 
 }

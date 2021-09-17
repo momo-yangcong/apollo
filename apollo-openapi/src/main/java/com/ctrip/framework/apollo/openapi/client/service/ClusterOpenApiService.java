@@ -26,43 +26,43 @@ import org.apache.http.util.EntityUtils;
 
 public class ClusterOpenApiService extends AbstractOpenApiService {
 
-  public ClusterOpenApiService(CloseableHttpClient client, String baseUrl, Gson gson) {
-    super(client, baseUrl, gson);
-  }
-
-  public OpenClusterDTO getCluster(String appId, String env, String clusterName) {
-    checkNotEmpty(appId, "App id");
-    checkNotEmpty(env, "Env");
-
-    if (Strings.isNullOrEmpty(clusterName)) {
-      clusterName = ConfigConsts.CLUSTER_NAME_DEFAULT;
+    public ClusterOpenApiService(CloseableHttpClient client, String baseUrl, Gson gson) {
+        super(client, baseUrl, gson);
     }
 
-    String path = String.format("envs/%s/apps/%s/clusters/%s", escapePath(env), escapePath(appId),
-        escapePath(clusterName));
+    public OpenClusterDTO getCluster(String appId, String env, String clusterName) {
+        checkNotEmpty(appId, "App id");
+        checkNotEmpty(env, "Env");
 
-    try (CloseableHttpResponse response = get(path)) {
-      return gson.fromJson(EntityUtils.toString(response.getEntity()), OpenClusterDTO.class);
-    } catch (Throwable ex) {
-      throw new RuntimeException(String
-          .format("Get cluster for appId: %s, cluster: %s in env: %s failed", appId, clusterName, env), ex);
+        if (Strings.isNullOrEmpty(clusterName)) {
+            clusterName = ConfigConsts.CLUSTER_NAME_DEFAULT;
+        }
+
+        String path = String.format("envs/%s/apps/%s/clusters/%s", escapePath(env), escapePath(appId),
+                escapePath(clusterName));
+
+        try (CloseableHttpResponse response = get(path)) {
+            return gson.fromJson(EntityUtils.toString(response.getEntity()), OpenClusterDTO.class);
+        } catch (Throwable ex) {
+            throw new RuntimeException(String
+                    .format("Get cluster for appId: %s, cluster: %s in env: %s failed", appId, clusterName, env), ex);
+        }
     }
-  }
 
-  public OpenClusterDTO createCluster(String env, OpenClusterDTO openClusterDTO) {
-    checkNotEmpty(openClusterDTO.getAppId(), "App id");
-    checkNotEmpty(env, "Env");
-    checkNotEmpty(openClusterDTO.getName(), "Cluster name");
-    checkNotEmpty(openClusterDTO.getDataChangeCreatedBy(), "Created by");
+    public OpenClusterDTO createCluster(String env, OpenClusterDTO openClusterDTO) {
+        checkNotEmpty(openClusterDTO.getAppId(), "App id");
+        checkNotEmpty(env, "Env");
+        checkNotEmpty(openClusterDTO.getName(), "Cluster name");
+        checkNotEmpty(openClusterDTO.getDataChangeCreatedBy(), "Created by");
 
-    String path = String.format("envs/%s/apps/%s/clusters", escapePath(env), escapePath(openClusterDTO.getAppId()));
+        String path = String.format("envs/%s/apps/%s/clusters", escapePath(env), escapePath(openClusterDTO.getAppId()));
 
-    try (CloseableHttpResponse response = post(path, openClusterDTO)) {
-      return gson.fromJson(EntityUtils.toString(response.getEntity()), OpenClusterDTO.class);
-    } catch (Throwable ex) {
-      throw new RuntimeException(String
-          .format("Create cluster: %s for appId: %s in env: %s failed", openClusterDTO.getName(),
-              openClusterDTO.getAppId(), env), ex);
+        try (CloseableHttpResponse response = post(path, openClusterDTO)) {
+            return gson.fromJson(EntityUtils.toString(response.getEntity()), OpenClusterDTO.class);
+        } catch (Throwable ex) {
+            throw new RuntimeException(String
+                    .format("Create cluster: %s for appId: %s in env: %s failed", openClusterDTO.getName(),
+                            openClusterDTO.getAppId(), env), ex);
+        }
     }
-  }
 }

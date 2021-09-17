@@ -20,55 +20,56 @@ import com.ctrip.framework.apollo.internals.ConfigRepository;
 import com.ctrip.framework.apollo.internals.DefaultConfig;
 import com.ctrip.framework.apollo.internals.RepositoryChangeListener;
 import com.google.common.collect.Sets;
-import java.util.Set;
 import org.springframework.util.CollectionUtils;
+
+import java.util.Set;
 
 /**
  * @author vdisk <vdisk@foxmail.com>
  */
 public class PureApolloConfig extends DefaultConfig implements RepositoryChangeListener {
 
-  /**
-   * Constructor.
-   *
-   * @param namespace        the namespace of this config instance
-   * @param configRepository the config repository for this config instance
-   */
-  public PureApolloConfig(String namespace,
-      ConfigRepository configRepository) {
-    super(namespace, configRepository);
-  }
-
-  @Override
-  public String getProperty(String key, String defaultValue) {
-    // step 1: check local cached properties file
-    String value = this.getPropertyFromRepository(key);
-
-    // step 2: check properties file from classpath
-    if (value == null) {
-      value = this.getPropertyFromAdditional(key);
+    /**
+     * Constructor.
+     *
+     * @param namespace        the namespace of this config instance
+     * @param configRepository the config repository for this config instance
+     */
+    public PureApolloConfig(String namespace,
+                            ConfigRepository configRepository) {
+        super(namespace, configRepository);
     }
 
-    this.tryWarnLog(value);
+    @Override
+    public String getProperty(String key, String defaultValue) {
+        // step 1: check local cached properties file
+        String value = this.getPropertyFromRepository(key);
 
-    return value == null ? defaultValue : value;
-  }
+        // step 2: check properties file from classpath
+        if (value == null) {
+            value = this.getPropertyFromAdditional(key);
+        }
 
-  @Override
-  public Set<String> getPropertyNames() {
-    // pure apollo config only contains the property from repository and the property from additional
-    Set<String> fromRepository = this.getPropertyNamesFromRepository();
-    Set<String> fromAdditional = this.getPropertyNamesFromAdditional();
-    if (CollectionUtils.isEmpty(fromRepository)) {
-      return fromAdditional;
+        this.tryWarnLog(value);
+
+        return value == null ? defaultValue : value;
     }
-    if (CollectionUtils.isEmpty(fromAdditional)) {
-      return fromRepository;
+
+    @Override
+    public Set<String> getPropertyNames() {
+        // pure apollo config only contains the property from repository and the property from additional
+        Set<String> fromRepository = this.getPropertyNamesFromRepository();
+        Set<String> fromAdditional = this.getPropertyNamesFromAdditional();
+        if (CollectionUtils.isEmpty(fromRepository)) {
+            return fromAdditional;
+        }
+        if (CollectionUtils.isEmpty(fromAdditional)) {
+            return fromRepository;
+        }
+        Set<String> propertyNames = Sets
+                .newLinkedHashSetWithExpectedSize(fromRepository.size() + fromAdditional.size());
+        propertyNames.addAll(fromRepository);
+        propertyNames.addAll(fromAdditional);
+        return propertyNames;
     }
-    Set<String> propertyNames = Sets
-        .newLinkedHashSetWithExpectedSize(fromRepository.size() + fromAdditional.size());
-    propertyNames.addAll(fromRepository);
-    propertyNames.addAll(fromAdditional);
-    return propertyNames;
-  }
 }

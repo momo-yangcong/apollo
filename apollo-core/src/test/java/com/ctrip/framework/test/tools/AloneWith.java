@@ -16,12 +16,9 @@
  */
 package com.ctrip.framework.test.tools;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import org.junit.runner.Runner;
+
+import java.lang.annotation.*;
 
 /**
  * @author kl (http://kailing.pub)
@@ -32,5 +29,5 @@ import org.junit.runner.Runner;
 @Inherited
 public @interface AloneWith {
 
-  Class<? extends Runner> value();
+    Class<? extends Runner> value();
 }

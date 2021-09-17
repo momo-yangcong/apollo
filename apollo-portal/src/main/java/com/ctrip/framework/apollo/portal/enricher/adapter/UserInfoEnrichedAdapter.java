@@ -21,51 +21,51 @@ package com.ctrip.framework.apollo.portal.enricher.adapter;
  */
 public interface UserInfoEnrichedAdapter {
 
-  /**
-   * get user id from the object
-   *
-   * @return user id
-   */
-  String getFirstUserId();
+    /**
+     * get user id from the object
+     *
+     * @return user id
+     */
+    String getFirstUserId();
 
-  /**
-   * set the user display name for the object
-   *
-   * @param userDisplayName user display name
-   */
-  void setFirstUserDisplayName(String userDisplayName);
+    /**
+     * set the user display name for the object
+     *
+     * @param userDisplayName user display name
+     */
+    void setFirstUserDisplayName(String userDisplayName);
 
-  /**
-   * get operator id from the object
-   *
-   * @return operator id
-   */
-  default String getSecondUserId() {
-    return null;
-  }
+    /**
+     * get operator id from the object
+     *
+     * @return operator id
+     */
+    default String getSecondUserId() {
+        return null;
+    }
 
-  /**
-   * set the user display name for the object
-   *
-   * @param userDisplayName user display name
-   */
-  default void setSecondUserDisplayName(String userDisplayName) {
-  }
+    /**
+     * set the user display name for the object
+     *
+     * @param userDisplayName user display name
+     */
+    default void setSecondUserDisplayName(String userDisplayName) {
+    }
 
-  /**
-   * get operator id from the object
-   *
-   * @return operator id
-   */
-  default String getThirdUserId() {
-    return null;
-  }
+    /**
+     * get operator id from the object
+     *
+     * @return operator id
+     */
+    default String getThirdUserId() {
+        return null;
+    }
 
-  /**
-   * set the user display name for the object
-   *
-   * @param userDisplayName user display name
-   */
-  default void setThirdUserDisplayName(String userDisplayName) {
-  }
+    /**
+     * set the user display name for the object
+     *
+     * @param userDisplayName user display name
+     */
+    default void setThirdUserDisplayName(String userDisplayName) {
+    }
 }

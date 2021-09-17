@@ -33,23 +33,23 @@ import java.util.List;
 @RestController
 public class CommitController {
 
-  private final CommitService commitService;
+    private final CommitService commitService;
 
-  public CommitController(final CommitService commitService) {
-    this.commitService = commitService;
-  }
-
-  @GetMapping("/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/commit")
-  public List<CommitDTO> find(@PathVariable String appId, @PathVariable String clusterName,
-                              @PathVariable String namespaceName, @RequestParam(required = false) String key, Pageable pageable){
-
-    List<Commit> commits;
-    if (StringUtils.isEmpty(key)) {
-      commits = commitService.find(appId, clusterName, namespaceName, pageable);
-    } else {
-      commits = commitService.findByKey(appId, clusterName, namespaceName, key, pageable);
+    public CommitController(final CommitService commitService) {
+        this.commitService = commitService;
     }
-    return BeanUtils.batchTransform(CommitDTO.class, commits);
-  }
+
+    @GetMapping("/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/commit")
+    public List<CommitDTO> find(@PathVariable String appId, @PathVariable String clusterName,
+                                @PathVariable String namespaceName, @RequestParam(required = false) String key, Pageable pageable) {
+
+        List<Commit> commits;
+        if (StringUtils.isEmpty(key)) {
+            commits = commitService.find(appId, clusterName, namespaceName, pageable);
+        } else {
+            commits = commitService.findByKey(appId, clusterName, namespaceName, key, pageable);
+        }
+        return BeanUtils.batchTransform(CommitDTO.class, commits);
+    }
 
 }

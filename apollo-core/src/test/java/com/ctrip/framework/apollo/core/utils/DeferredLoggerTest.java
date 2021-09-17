@@ -18,14 +18,15 @@ package com.ctrip.framework.apollo.core.utils;
 
 import com.ctrip.framework.test.tools.AloneRunner;
 import com.ctrip.framework.test.tools.AloneWith;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.slf4j.Logger;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 /**
  * @author kl (http://kailing.pub)
@@ -35,63 +36,63 @@ import org.slf4j.Logger;
 @AloneWith(JUnit4.class)
 public class DeferredLoggerTest {
 
-  private static ByteArrayOutputStream outContent;
-  private static Logger logger = null;
-  private static PrintStream printStream;
+    private static ByteArrayOutputStream outContent;
+    private static Logger logger = null;
+    private static PrintStream printStream;
 
-  @BeforeClass
-  public static void init() throws NoSuchFieldException, IllegalAccessException {
-    DeferredLoggerTest.outContent = new ByteArrayOutputStream();
-    DeferredLoggerTest.printStream = new PrintStream(DeferredLoggerTest.outContent);
-    System.setOut(DeferredLoggerTest.printStream);
-    DeferredLoggerTest.logger = DeferredLoggerFactory.getLogger("DeferredLoggerTest");
-  }
+    @BeforeClass
+    public static void init() throws NoSuchFieldException, IllegalAccessException {
+        DeferredLoggerTest.outContent = new ByteArrayOutputStream();
+        DeferredLoggerTest.printStream = new PrintStream(DeferredLoggerTest.outContent);
+        System.setOut(DeferredLoggerTest.printStream);
+        DeferredLoggerTest.logger = DeferredLoggerFactory.getLogger("DeferredLoggerTest");
+    }
 
-  @Test
-  public void testErrorLog() {
-    DeferredLoggerTest.logger.error("errorLogger");
-    Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("errorLogger"));
-  }
+    @Test
+    public void testErrorLog() {
+        DeferredLoggerTest.logger.error("errorLogger");
+        Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("errorLogger"));
+    }
 
-  @Test
-  public void testInfoLog() {
-    DeferredLoggerTest.logger.info("inFoLogger");
-    Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("inFoLogger"));
-  }
+    @Test
+    public void testInfoLog() {
+        DeferredLoggerTest.logger.info("inFoLogger");
+        Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("inFoLogger"));
+    }
 
-  @Test
-  public void testWarnLog() {
-    DeferredLoggerTest.logger.warn("warnLogger");
-    Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("warnLogger"));
-  }
+    @Test
+    public void testWarnLog() {
+        DeferredLoggerTest.logger.warn("warnLogger");
+        Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("warnLogger"));
+    }
 
-  @Test
-  public void testDebugLog() {
-    DeferredLoggerTest.logger.warn("debugLogger");
-    Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("debugLogger"));
-  }
+    @Test
+    public void testDebugLog() {
+        DeferredLoggerTest.logger.warn("debugLogger");
+        Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("debugLogger"));
+    }
 
-  @Test
-  public void testDeferredLog() {
-    DeferredLogger.enable();
+    @Test
+    public void testDeferredLog() {
+        DeferredLogger.enable();
 
-    DeferredLoggerTest.logger.error("errorLogger_testDeferredLog");
-    DeferredLoggerTest.logger.info("inFoLogger_testDeferredLog");
-    DeferredLoggerTest.logger.warn("warnLogger_testDeferredLog");
-    DeferredLoggerTest.logger.debug("debugLogger_testDeferredLog");
+        DeferredLoggerTest.logger.error("errorLogger_testDeferredLog");
+        DeferredLoggerTest.logger.info("inFoLogger_testDeferredLog");
+        DeferredLoggerTest.logger.warn("warnLogger_testDeferredLog");
+        DeferredLoggerTest.logger.debug("debugLogger_testDeferredLog");
 
-    Assert.assertFalse(DeferredLoggerTest.outContent.toString().contains("errorLogger_testDeferredLog"));
-    Assert.assertFalse(DeferredLoggerTest.outContent.toString().contains("inFoLogger_testDeferredLog"));
-    Assert.assertFalse(DeferredLoggerTest.outContent.toString().contains("warnLogger_testDeferredLog"));
-    Assert.assertFalse(DeferredLoggerTest.outContent.toString().contains("debugLogger_testDeferredLog"));
+        Assert.assertFalse(DeferredLoggerTest.outContent.toString().contains("errorLogger_testDeferredLog"));
+        Assert.assertFalse(DeferredLoggerTest.outContent.toString().contains("inFoLogger_testDeferredLog"));
+        Assert.assertFalse(DeferredLoggerTest.outContent.toString().contains("warnLogger_testDeferredLog"));
+        Assert.assertFalse(DeferredLoggerTest.outContent.toString().contains("debugLogger_testDeferredLog"));
 
-    DeferredLogCache.replayTo();
+        DeferredLogCache.replayTo();
 
-    Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("errorLogger_testDeferredLog"));
-    Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("inFoLogger_testDeferredLog"));
-    Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("warnLogger_testDeferredLog"));
-    Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("debugLogger_testDeferredLog"));
+        Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("errorLogger_testDeferredLog"));
+        Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("inFoLogger_testDeferredLog"));
+        Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("warnLogger_testDeferredLog"));
+        Assert.assertTrue(DeferredLoggerTest.outContent.toString().contains("debugLogger_testDeferredLog"));
 
-  }
+    }
 
 }

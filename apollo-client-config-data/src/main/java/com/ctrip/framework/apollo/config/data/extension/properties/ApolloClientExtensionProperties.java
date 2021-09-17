@@ -23,38 +23,38 @@ import com.ctrip.framework.apollo.config.data.extension.enums.ApolloClientMessag
  */
 public class ApolloClientExtensionProperties {
 
-  /**
-   * enable apollo client extension(webclient/websocket and authentication)
-   */
-  private Boolean enabled = false;
+    /**
+     * enable apollo client extension(webclient/websocket and authentication)
+     */
+    private Boolean enabled = false;
 
-  /**
-   * apollo client listening type
-   */
-  private ApolloClientMessagingType messagingType = ApolloClientMessagingType.LONG_POLLING;
+    /**
+     * apollo client listening type
+     */
+    private ApolloClientMessagingType messagingType = ApolloClientMessagingType.LONG_POLLING;
 
-  public Boolean getEnabled() {
-    return enabled;
-  }
+    public Boolean getEnabled() {
+        return enabled;
+    }
 
-  public void setEnabled(Boolean enabled) {
-    this.enabled = enabled;
-  }
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
 
-  public ApolloClientMessagingType getMessagingType() {
-    return messagingType;
-  }
+    public ApolloClientMessagingType getMessagingType() {
+        return messagingType;
+    }
 
-  public void setMessagingType(
-      ApolloClientMessagingType messagingType) {
-    this.messagingType = messagingType;
-  }
+    public void setMessagingType(
+            ApolloClientMessagingType messagingType) {
+        this.messagingType = messagingType;
+    }
 
-  @Override
-  public String toString() {
-    return "ApolloClientExtensionProperties{" +
-        "enabled=" + enabled +
-        ", messagingType=" + messagingType +
-        '}';
-  }
+    @Override
+    public String toString() {
+        return "ApolloClientExtensionProperties{" +
+                "enabled=" + enabled +
+                ", messagingType=" + messagingType +
+                '}';
+    }
 }

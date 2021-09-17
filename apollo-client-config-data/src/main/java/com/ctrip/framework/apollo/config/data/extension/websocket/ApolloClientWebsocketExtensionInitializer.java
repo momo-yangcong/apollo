@@ -28,19 +28,19 @@ import org.springframework.boot.context.properties.bind.Binder;
  */
 public class ApolloClientWebsocketExtensionInitializer implements ApolloClientExtensionInitializer {
 
-  private final Log log;
+    private final Log log;
 
-  private final ConfigurableBootstrapContext bootstrapContext;
+    private final ConfigurableBootstrapContext bootstrapContext;
 
-  public ApolloClientWebsocketExtensionInitializer(Log log,
-      ConfigurableBootstrapContext bootstrapContext) {
-    this.log = log;
-    this.bootstrapContext = bootstrapContext;
-  }
+    public ApolloClientWebsocketExtensionInitializer(Log log,
+                                                     ConfigurableBootstrapContext bootstrapContext) {
+        this.log = log;
+        this.bootstrapContext = bootstrapContext;
+    }
 
-  @Override
-  public void initialize(ApolloClientProperties apolloClientProperties, Binder binder,
-      BindHandler bindHandler) {
-    throw new UnsupportedOperationException("apollo client websocket support is not complete yet.");
-  }
+    @Override
+    public void initialize(ApolloClientProperties apolloClientProperties, Binder binder,
+                           BindHandler bindHandler) {
+        throw new UnsupportedOperationException("apollo client websocket support is not complete yet.");
+    }
 }

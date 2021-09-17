@@ -16,11 +16,7 @@
  */
 package com.ctrip.framework.apollo.spring.annotation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * Use this annotation to inject json property from Apollo, support the same format as Spring @Value.
@@ -33,7 +29,7 @@ import java.lang.annotation.Target;
  * &#064;ApolloJsonValue("${someJsonPropertyKey:someDefaultValue}")
  * private SomeObject someObject;
  * </pre>
- *
+ * <p>
  * Create by zhangzheng on 2018/3/6
  *
  * @see org.springframework.beans.factory.annotation.Value
@@ -43,8 +39,8 @@ import java.lang.annotation.Target;
 @Documented
 public @interface ApolloJsonValue {
 
-  /**
-   * The actual value expression: e.g. "${someJsonPropertyKey:someDefaultValue}".
-   */
-  String value();
+    /**
+     * The actual value expression: e.g. "${someJsonPropertyKey:someDefaultValue}".
+     */
+    String value();
 }

@@ -17,7 +17,6 @@
 package com.ctrip.framework.apollo.biz.entity;
 
 import com.ctrip.framework.apollo.common.entity.BaseEntity;
-
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -31,41 +30,41 @@ import javax.persistence.Table;
 @Where(clause = "isDeleted = 0")
 public class Privilege extends BaseEntity {
 
-  @Column(name = "Name", nullable = false)
-  private String name;
+    @Column(name = "Name", nullable = false)
+    private String name;
 
-  @Column(name = "PrivilType", nullable = false)
-  private String privilType;
+    @Column(name = "PrivilType", nullable = false)
+    private String privilType;
 
-  @Column(name = "NamespaceId")
-  private long namespaceId;
+    @Column(name = "NamespaceId")
+    private long namespaceId;
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public long getNamespaceId() {
-    return namespaceId;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public String getPrivilType() {
-    return privilType;
-  }
+    public long getNamespaceId() {
+        return namespaceId;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setNamespaceId(long namespaceId) {
+        this.namespaceId = namespaceId;
+    }
 
-  public void setNamespaceId(long namespaceId) {
-    this.namespaceId = namespaceId;
-  }
+    public String getPrivilType() {
+        return privilType;
+    }
 
-  public void setPrivilType(String privilType) {
-    this.privilType = privilType;
-  }
+    public void setPrivilType(String privilType) {
+        this.privilType = privilType;
+    }
 
-  public String toString() {
-    return toStringHelper().add("namespaceId", namespaceId).add("privilType", privilType)
-        .add("name", name).toString();
-  }
+    public String toString() {
+        return toStringHelper().add("namespaceId", namespaceId).add("privilType", privilType)
+                .add("name", name).toString();
+    }
 }

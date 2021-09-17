@@ -16,11 +16,6 @@
  */
 package com.ctrip.framework.apollo.spring.boot;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
 import com.ctrip.framework.apollo.build.MockInjector;
 import com.ctrip.framework.apollo.core.ApolloClientSystemConsts;
 import com.ctrip.framework.apollo.core.ConfigConsts;
@@ -33,114 +28,117 @@ import org.junit.Test;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 public class ApolloApplicationContextInitializerTest {
 
-  private ApolloApplicationContextInitializer apolloApplicationContextInitializer;
+    private ApolloApplicationContextInitializer apolloApplicationContextInitializer;
 
-  @Before
-  public void setUp() throws Exception {
-    apolloApplicationContextInitializer = new ApolloApplicationContextInitializer();
-  }
+    @Before
+    public void setUp() throws Exception {
+        apolloApplicationContextInitializer = new ApolloApplicationContextInitializer();
+    }
 
-  @After
-  public void tearDown() throws Exception {
-    System.clearProperty(ApolloClientSystemConsts.APP_ID);
-    System.clearProperty(ConfigConsts.APOLLO_CLUSTER_KEY);
-    System.clearProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR);
-    System.clearProperty(ConfigConsts.APOLLO_META_KEY);
+    @After
+    public void tearDown() throws Exception {
+        System.clearProperty(ApolloClientSystemConsts.APP_ID);
+        System.clearProperty(ConfigConsts.APOLLO_CLUSTER_KEY);
+        System.clearProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR);
+        System.clearProperty(ConfigConsts.APOLLO_META_KEY);
 
-    MockInjector.reset();
-  }
+        MockInjector.reset();
+    }
 
-  @Test
-  public void testFillFromEnvironment() throws Exception {
-    String someAppId = "someAppId";
-    String someCluster = "someCluster";
-    String someCacheDir = "someCacheDir";
-    String someApolloMeta = "someApolloMeta";
+    @Test
+    public void testFillFromEnvironment() throws Exception {
+        String someAppId = "someAppId";
+        String someCluster = "someCluster";
+        String someCacheDir = "someCacheDir";
+        String someApolloMeta = "someApolloMeta";
 
-    ConfigurableEnvironment environment = mock(ConfigurableEnvironment.class);
+        ConfigurableEnvironment environment = mock(ConfigurableEnvironment.class);
 
-    when(environment.getProperty(ApolloClientSystemConsts.APP_ID)).thenReturn(someAppId);
-    when(environment.getProperty(ConfigConsts.APOLLO_CLUSTER_KEY)).thenReturn(someCluster);
-    when(environment.getProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR)).thenReturn(someCacheDir);
-    when(environment.getProperty(ConfigConsts.APOLLO_META_KEY)).thenReturn(someApolloMeta);
+        when(environment.getProperty(ApolloClientSystemConsts.APP_ID)).thenReturn(someAppId);
+        when(environment.getProperty(ConfigConsts.APOLLO_CLUSTER_KEY)).thenReturn(someCluster);
+        when(environment.getProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR)).thenReturn(someCacheDir);
+        when(environment.getProperty(ConfigConsts.APOLLO_META_KEY)).thenReturn(someApolloMeta);
 
-    apolloApplicationContextInitializer.initializeSystemProperty(environment);
+        apolloApplicationContextInitializer.initializeSystemProperty(environment);
 
-    assertEquals(someAppId, System.getProperty(ApolloClientSystemConsts.APP_ID));
-    assertEquals(someCluster, System.getProperty(ConfigConsts.APOLLO_CLUSTER_KEY));
-    assertEquals(someCacheDir, System.getProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR));
-    assertEquals(someApolloMeta, System.getProperty(ConfigConsts.APOLLO_META_KEY));
-  }
+        assertEquals(someAppId, System.getProperty(ApolloClientSystemConsts.APP_ID));
+        assertEquals(someCluster, System.getProperty(ConfigConsts.APOLLO_CLUSTER_KEY));
+        assertEquals(someCacheDir, System.getProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR));
+        assertEquals(someApolloMeta, System.getProperty(ConfigConsts.APOLLO_META_KEY));
+    }
 
-  @Test
-  public void testFillFromEnvironmentWithSystemPropertyAlreadyFilled() throws Exception {
-    String someAppId = "someAppId";
-    String someCluster = "someCluster";
-    String someCacheDir = "someCacheDir";
-    String someApolloMeta = "someApolloMeta";
+    @Test
+    public void testFillFromEnvironmentWithSystemPropertyAlreadyFilled() throws Exception {
+        String someAppId = "someAppId";
+        String someCluster = "someCluster";
+        String someCacheDir = "someCacheDir";
+        String someApolloMeta = "someApolloMeta";
 
-    System.setProperty(ApolloClientSystemConsts.APP_ID, someAppId);
-    System.setProperty(ConfigConsts.APOLLO_CLUSTER_KEY, someCluster);
-    System.setProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR, someCacheDir);
-    System.setProperty(ConfigConsts.APOLLO_META_KEY, someApolloMeta);
+        System.setProperty(ApolloClientSystemConsts.APP_ID, someAppId);
+        System.setProperty(ConfigConsts.APOLLO_CLUSTER_KEY, someCluster);
+        System.setProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR, someCacheDir);
+        System.setProperty(ConfigConsts.APOLLO_META_KEY, someApolloMeta);
 
-    String anotherAppId = "anotherAppId";
-    String anotherCluster = "anotherCluster";
-    String anotherCacheDir = "anotherCacheDir";
-    String anotherApolloMeta = "anotherApolloMeta";
+        String anotherAppId = "anotherAppId";
+        String anotherCluster = "anotherCluster";
+        String anotherCacheDir = "anotherCacheDir";
+        String anotherApolloMeta = "anotherApolloMeta";
 
-    ConfigurableEnvironment environment = mock(ConfigurableEnvironment.class);
+        ConfigurableEnvironment environment = mock(ConfigurableEnvironment.class);
 
-    when(environment.getProperty(ApolloClientSystemConsts.APP_ID)).thenReturn(anotherAppId);
-    when(environment.getProperty(ConfigConsts.APOLLO_CLUSTER_KEY)).thenReturn(anotherCluster);
-    when(environment.getProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR)).thenReturn(anotherCacheDir);
-    when(environment.getProperty(ConfigConsts.APOLLO_META_KEY)).thenReturn(anotherApolloMeta);
+        when(environment.getProperty(ApolloClientSystemConsts.APP_ID)).thenReturn(anotherAppId);
+        when(environment.getProperty(ConfigConsts.APOLLO_CLUSTER_KEY)).thenReturn(anotherCluster);
+        when(environment.getProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR)).thenReturn(anotherCacheDir);
+        when(environment.getProperty(ConfigConsts.APOLLO_META_KEY)).thenReturn(anotherApolloMeta);
 
-    apolloApplicationContextInitializer.initializeSystemProperty(environment);
+        apolloApplicationContextInitializer.initializeSystemProperty(environment);
 
-    assertEquals(someAppId, System.getProperty(ApolloClientSystemConsts.APP_ID));
-    assertEquals(someCluster, System.getProperty(ConfigConsts.APOLLO_CLUSTER_KEY));
-    assertEquals(someCacheDir, System.getProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR));
-    assertEquals(someApolloMeta, System.getProperty(ConfigConsts.APOLLO_META_KEY));
-  }
+        assertEquals(someAppId, System.getProperty(ApolloClientSystemConsts.APP_ID));
+        assertEquals(someCluster, System.getProperty(ConfigConsts.APOLLO_CLUSTER_KEY));
+        assertEquals(someCacheDir, System.getProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR));
+        assertEquals(someApolloMeta, System.getProperty(ConfigConsts.APOLLO_META_KEY));
+    }
 
-  @Test
-  public void testFillFromEnvironmentWithNoPropertyFromEnvironment() throws Exception {
-    ConfigurableEnvironment environment = mock(ConfigurableEnvironment.class);
+    @Test
+    public void testFillFromEnvironmentWithNoPropertyFromEnvironment() throws Exception {
+        ConfigurableEnvironment environment = mock(ConfigurableEnvironment.class);
 
-    apolloApplicationContextInitializer.initializeSystemProperty(environment);
+        apolloApplicationContextInitializer.initializeSystemProperty(environment);
 
-    assertNull(System.getProperty(ApolloClientSystemConsts.APP_ID));
-    assertNull(System.getProperty(ConfigConsts.APOLLO_CLUSTER_KEY));
-    assertNull(System.getProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR));
-    assertNull(System.getProperty(ConfigConsts.APOLLO_META_KEY));
-  }
+        assertNull(System.getProperty(ApolloClientSystemConsts.APP_ID));
+        assertNull(System.getProperty(ConfigConsts.APOLLO_CLUSTER_KEY));
+        assertNull(System.getProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR));
+        assertNull(System.getProperty(ConfigConsts.APOLLO_META_KEY));
+    }
 
-  @Test
-  public void testPropertyNamesCacheEnabled() {
-    ConfigurableEnvironment environment = mock(ConfigurableEnvironment.class);
-    MutablePropertySources propertySources = new MutablePropertySources();
-    when(environment.getPropertySources()).thenReturn(propertySources);
-    when(environment.getProperty(PropertySourcesConstants.APOLLO_BOOTSTRAP_NAMESPACES,
-        ConfigConsts.NAMESPACE_APPLICATION)).thenReturn("");
+    @Test
+    public void testPropertyNamesCacheEnabled() {
+        ConfigurableEnvironment environment = mock(ConfigurableEnvironment.class);
+        MutablePropertySources propertySources = new MutablePropertySources();
+        when(environment.getPropertySources()).thenReturn(propertySources);
+        when(environment.getProperty(PropertySourcesConstants.APOLLO_BOOTSTRAP_NAMESPACES,
+                ConfigConsts.NAMESPACE_APPLICATION)).thenReturn("");
 
-    apolloApplicationContextInitializer.initialize(environment);
+        apolloApplicationContextInitializer.initialize(environment);
 
-    assertTrue(propertySources.contains(PropertySourcesConstants.APOLLO_BOOTSTRAP_PROPERTY_SOURCE_NAME));
-    assertFalse(propertySources.iterator().next() instanceof CachedCompositePropertySource);
+        assertTrue(propertySources.contains(PropertySourcesConstants.APOLLO_BOOTSTRAP_PROPERTY_SOURCE_NAME));
+        assertFalse(propertySources.iterator().next() instanceof CachedCompositePropertySource);
 
-    ConfigUtil configUtil = new ConfigUtil();
-    configUtil = spy(configUtil);
-    when(configUtil.isPropertyNamesCacheEnabled()).thenReturn(true);
-    MockInjector.setInstance(ConfigUtil.class, configUtil);
-    apolloApplicationContextInitializer = new ApolloApplicationContextInitializer();
-    propertySources.remove(PropertySourcesConstants.APOLLO_BOOTSTRAP_PROPERTY_SOURCE_NAME);
+        ConfigUtil configUtil = new ConfigUtil();
+        configUtil = spy(configUtil);
+        when(configUtil.isPropertyNamesCacheEnabled()).thenReturn(true);
+        MockInjector.setInstance(ConfigUtil.class, configUtil);
+        apolloApplicationContextInitializer = new ApolloApplicationContextInitializer();
+        propertySources.remove(PropertySourcesConstants.APOLLO_BOOTSTRAP_PROPERTY_SOURCE_NAME);
 
-    apolloApplicationContextInitializer.initialize(environment);
+        apolloApplicationContextInitializer.initialize(environment);
 
-    assertTrue(propertySources.contains(PropertySourcesConstants.APOLLO_BOOTSTRAP_PROPERTY_SOURCE_NAME));
-    assertTrue(propertySources.iterator().next() instanceof CachedCompositePropertySource);
-  }
+        assertTrue(propertySources.contains(PropertySourcesConstants.APOLLO_BOOTSTRAP_PROPERTY_SOURCE_NAME));
+        assertTrue(propertySources.iterator().next() instanceof CachedCompositePropertySource);
+    }
 }

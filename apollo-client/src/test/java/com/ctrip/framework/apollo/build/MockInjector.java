@@ -22,6 +22,7 @@ import com.ctrip.framework.apollo.spi.ApolloInjectorCustomizer;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
+
 import java.util.Map;
 
 /**
@@ -29,61 +30,61 @@ import java.util.Map;
  */
 public class MockInjector implements Injector {
 
-  private static Map<Class, Object> classMap = Maps.newHashMap();
-  private static Table<Class, String, Object> classTable = HashBasedTable.create();
-  private static Injector delegate = new DefaultInjector();
+    private static Map<Class, Object> classMap = Maps.newHashMap();
+    private static Table<Class, String, Object> classTable = HashBasedTable.create();
+    private static Injector delegate = new DefaultInjector();
 
-  @Override
-  public <T> T getInstance(Class<T> clazz) {
-    if (delegate != null) {
-      return delegate.getInstance(clazz);
+    public static void setInstance(Class clazz, Object o) {
+        classMap.put(clazz, o);
     }
 
-    return null;
-  }
-
-  @Override
-  public <T> T getInstance(Class<T> clazz, String name) {
-    if (delegate != null) {
-      return delegate.getInstance(clazz, name);
+    public static void setInstance(Class clazz, String name, Object o) {
+        classTable.put(clazz, name, o);
     }
 
-    return null;
-  }
+    public static void setDelegate(Injector delegateInjector) {
+        delegate = delegateInjector;
+    }
 
-  public static void setInstance(Class clazz, Object o) {
-    classMap.put(clazz, o);
-  }
-
-  public static void setInstance(Class clazz, String name, Object o) {
-    classTable.put(clazz, name, o);
-  }
-
-  public static void setDelegate(Injector delegateInjector) {
-    delegate = delegateInjector;
-  }
-
-  public static void reset() {
-    classMap.clear();
-    classTable.clear();
-    delegate = new DefaultInjector();
-  }
-
-  public static class InjectCustomizer implements ApolloInjectorCustomizer {
+    public static void reset() {
+        classMap.clear();
+        classTable.clear();
+        delegate = new DefaultInjector();
+    }
 
     @Override
     public <T> T getInstance(Class<T> clazz) {
-      return (T) classMap.get(clazz);
+        if (delegate != null) {
+            return delegate.getInstance(clazz);
+        }
+
+        return null;
     }
 
     @Override
     public <T> T getInstance(Class<T> clazz, String name) {
-      return (T) classTable.get(clazz, name);
+        if (delegate != null) {
+            return delegate.getInstance(clazz, name);
+        }
+
+        return null;
     }
 
-    @Override
-    public int getOrder() {
-      return 0;
+    public static class InjectCustomizer implements ApolloInjectorCustomizer {
+
+        @Override
+        public <T> T getInstance(Class<T> clazz) {
+            return (T) classMap.get(clazz);
+        }
+
+        @Override
+        public <T> T getInstance(Class<T> clazz, String name) {
+            return (T) classTable.get(clazz, name);
+        }
+
+        @Override
+        public int getOrder() {
+            return 0;
+        }
     }
-  }
 }

@@ -23,25 +23,26 @@ package com.ctrip.framework.apollo.portal.environment;
  * From database,
  * ...
  * Just implement this interface
+ *
  * @author wxq
  */
 public interface PortalMetaServerProvider {
 
-  /**
-   * @param targetEnv environment
-   * @return meta server address matched environment
-   */
-  String getMetaServerAddress(Env targetEnv);
+    /**
+     * @param targetEnv environment
+     * @return meta server address matched environment
+     */
+    String getMetaServerAddress(Env targetEnv);
 
-  /**
-   * @param targetEnv environment
-   * @return environment's meta server address exists or not
-   */
-  boolean exists(Env targetEnv);
+    /**
+     * @param targetEnv environment
+     * @return environment's meta server address exists or not
+     */
+    boolean exists(Env targetEnv);
 
-  /**
-   * reload the meta server address in runtime
-   */
-  void reload();
+    /**
+     * reload the meta server address in runtime
+     */
+    void reload();
 
 }

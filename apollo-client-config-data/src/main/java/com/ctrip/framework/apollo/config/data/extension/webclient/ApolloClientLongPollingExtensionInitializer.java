@@ -22,7 +22,6 @@ import com.ctrip.framework.apollo.config.data.extension.webclient.customizer.spi
 import com.ctrip.framework.apollo.config.data.injector.ApolloConfigDataInjectorCustomizer;
 import com.ctrip.framework.apollo.util.http.HttpClient;
 import com.ctrip.framework.foundation.internals.ServiceBootstrap;
-import java.util.List;
 import org.apache.commons.logging.Log;
 import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.context.properties.bind.BindHandler;
@@ -31,39 +30,41 @@ import org.springframework.boot.web.reactive.function.client.WebClientCustomizer
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.List;
+
 /**
  * @author vdisk <vdisk@foxmail.com>
  */
 public class ApolloClientLongPollingExtensionInitializer implements
-    ApolloClientExtensionInitializer {
+        ApolloClientExtensionInitializer {
 
-  private final Log log;
+    private final Log log;
 
-  private final ConfigurableBootstrapContext bootstrapContext;
+    private final ConfigurableBootstrapContext bootstrapContext;
 
-  public ApolloClientLongPollingExtensionInitializer(Log log,
-      ConfigurableBootstrapContext bootstrapContext) {
-    this.log = log;
-    this.bootstrapContext = bootstrapContext;
-  }
-
-  @Override
-  public void initialize(ApolloClientProperties apolloClientProperties, Binder binder,
-      BindHandler bindHandler) {
-    WebClient.Builder webClientBuilder = WebClient.builder();
-    List<ApolloClientWebClientCustomizerFactory> factories = ServiceBootstrap
-        .loadAllOrdered(ApolloClientWebClientCustomizerFactory.class);
-    if (!CollectionUtils.isEmpty(factories)) {
-      for (ApolloClientWebClientCustomizerFactory factory : factories) {
-        WebClientCustomizer webClientCustomizer = factory
-            .createWebClientCustomizer(apolloClientProperties, binder, bindHandler, this.log,
-                this.bootstrapContext);
-        if (webClientCustomizer != null) {
-          webClientCustomizer.customize(webClientBuilder);
-        }
-      }
+    public ApolloClientLongPollingExtensionInitializer(Log log,
+                                                       ConfigurableBootstrapContext bootstrapContext) {
+        this.log = log;
+        this.bootstrapContext = bootstrapContext;
     }
-    HttpClient httpClient = new ApolloWebClientHttpClient(webClientBuilder.build());
-    ApolloConfigDataInjectorCustomizer.registerIfAbsent(HttpClient.class, () -> httpClient);
-  }
+
+    @Override
+    public void initialize(ApolloClientProperties apolloClientProperties, Binder binder,
+                           BindHandler bindHandler) {
+        WebClient.Builder webClientBuilder = WebClient.builder();
+        List<ApolloClientWebClientCustomizerFactory> factories = ServiceBootstrap
+                .loadAllOrdered(ApolloClientWebClientCustomizerFactory.class);
+        if (!CollectionUtils.isEmpty(factories)) {
+            for (ApolloClientWebClientCustomizerFactory factory : factories) {
+                WebClientCustomizer webClientCustomizer = factory
+                        .createWebClientCustomizer(apolloClientProperties, binder, bindHandler, this.log,
+                                this.bootstrapContext);
+                if (webClientCustomizer != null) {
+                    webClientCustomizer.customize(webClientBuilder);
+                }
+            }
+        }
+        HttpClient httpClient = new ApolloWebClientHttpClient(webClientBuilder.build());
+        ApolloConfigDataInjectorCustomizer.registerIfAbsent(HttpClient.class, () -> httpClient);
+    }
 }

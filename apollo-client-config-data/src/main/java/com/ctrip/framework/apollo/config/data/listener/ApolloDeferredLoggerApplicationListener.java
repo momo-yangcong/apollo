@@ -26,15 +26,15 @@ import org.springframework.context.ApplicationListener;
  * @author vdisk <vdisk@foxmail.com>
  */
 public class ApolloDeferredLoggerApplicationListener implements
-    ApplicationListener<SpringApplicationEvent> {
+        ApplicationListener<SpringApplicationEvent> {
 
-  @Override
-  public void onApplicationEvent(SpringApplicationEvent event) {
-    if (event instanceof ApplicationContextInitializedEvent) {
-      DeferredLogger.replayTo();
+    @Override
+    public void onApplicationEvent(SpringApplicationEvent event) {
+        if (event instanceof ApplicationContextInitializedEvent) {
+            DeferredLogger.replayTo();
+        }
+        if (event instanceof ApplicationFailedEvent) {
+            DeferredLogger.replayTo();
+        }
     }
-    if (event instanceof ApplicationFailedEvent) {
-      DeferredLogger.replayTo();
-    }
-  }
 }

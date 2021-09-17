@@ -21,7 +21,6 @@ import com.ctrip.framework.apollo.portal.entity.bo.UserInfo;
 import com.ctrip.framework.apollo.portal.entity.po.UserPO;
 import com.ctrip.framework.apollo.portal.repository.UserRepository;
 import com.ctrip.framework.apollo.portal.spi.UserService;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -41,85 +40,85 @@ import java.util.stream.Collectors;
  */
 public class SpringSecurityUserService implements UserService {
 
-  private final List<GrantedAuthority> authorities = Collections
-      .unmodifiableList(Arrays.asList(new SimpleGrantedAuthority("ROLE_user")));
+    private final List<GrantedAuthority> authorities = Collections
+            .unmodifiableList(Arrays.asList(new SimpleGrantedAuthority("ROLE_user")));
 
-  private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-  private final JdbcUserDetailsManager userDetailsManager;
+    private final JdbcUserDetailsManager userDetailsManager;
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  public SpringSecurityUserService(
-      PasswordEncoder passwordEncoder,
-      JdbcUserDetailsManager userDetailsManager,
-      UserRepository userRepository) {
-    this.passwordEncoder = passwordEncoder;
-    this.userDetailsManager = userDetailsManager;
-    this.userRepository = userRepository;
-  }
-
-  @Transactional
-  public void createOrUpdate(UserPO user) {
-    String username = user.getUsername();
-
-    User userDetails = new User(username, passwordEncoder.encode(user.getPassword()), authorities);
-
-    if (userDetailsManager.userExists(username)) {
-      userDetailsManager.updateUser(userDetails);
-    } else {
-      userDetailsManager.createUser(userDetails);
+    public SpringSecurityUserService(
+            PasswordEncoder passwordEncoder,
+            JdbcUserDetailsManager userDetailsManager,
+            UserRepository userRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.userDetailsManager = userDetailsManager;
+        this.userRepository = userRepository;
     }
 
-    UserPO managedUser = userRepository.findByUsername(username);
-    managedUser.setEmail(user.getEmail());
-    managedUser.setUserDisplayName(user.getUserDisplayName());
+    @Transactional
+    public void createOrUpdate(UserPO user) {
+        String username = user.getUsername();
 
-    userRepository.save(managedUser);
-  }
+        User userDetails = new User(username, passwordEncoder.encode(user.getPassword()), authorities);
 
-  @Override
-  public List<UserInfo> searchUsers(String keyword, int offset, int limit) {
-    List<UserPO> users = this.findUsers(keyword);
-    if (CollectionUtils.isEmpty(users)) {
-      return Collections.emptyList();
-    }
-    return users.stream().map(UserPO::toUserInfo)
-        .collect(Collectors.toList());
-  }
+        if (userDetailsManager.userExists(username)) {
+            userDetailsManager.updateUser(userDetails);
+        } else {
+            userDetailsManager.createUser(userDetails);
+        }
 
-  private List<UserPO> findUsers(String keyword) {
-    if (StringUtils.isEmpty(keyword)) {
-      return userRepository.findFirst20ByEnabled(1);
-    }
-    List<UserPO> users = new ArrayList<>();
-    List<UserPO> byUsername = userRepository
-        .findByUsernameLikeAndEnabled("%" + keyword + "%", 1);
-    List<UserPO> byUserDisplayName = userRepository
-        .findByUserDisplayNameLikeAndEnabled("%" + keyword + "%", 1);
-    if (!CollectionUtils.isEmpty(byUsername)) {
-      users.addAll(byUsername);
-    }
-    if (!CollectionUtils.isEmpty(byUserDisplayName)) {
-      users.addAll(byUserDisplayName);
-    }
-    return users;
-  }
+        UserPO managedUser = userRepository.findByUsername(username);
+        managedUser.setEmail(user.getEmail());
+        managedUser.setUserDisplayName(user.getUserDisplayName());
 
-  @Override
-  public UserInfo findByUserId(String userId) {
-    UserPO userPO = userRepository.findByUsername(userId);
-    return userPO == null ? null : userPO.toUserInfo();
-  }
-
-  @Override
-  public List<UserInfo> findByUserIds(List<String> userIds) {
-    List<UserPO> users = userRepository.findByUsernameIn(userIds);
-
-    if (CollectionUtils.isEmpty(users)) {
-      return Collections.emptyList();
+        userRepository.save(managedUser);
     }
 
-    return users.stream().map(UserPO::toUserInfo).collect(Collectors.toList());
-  }
+    @Override
+    public List<UserInfo> searchUsers(String keyword, int offset, int limit) {
+        List<UserPO> users = this.findUsers(keyword);
+        if (CollectionUtils.isEmpty(users)) {
+            return Collections.emptyList();
+        }
+        return users.stream().map(UserPO::toUserInfo)
+                .collect(Collectors.toList());
+    }
+
+    private List<UserPO> findUsers(String keyword) {
+        if (StringUtils.isEmpty(keyword)) {
+            return userRepository.findFirst20ByEnabled(1);
+        }
+        List<UserPO> users = new ArrayList<>();
+        List<UserPO> byUsername = userRepository
+                .findByUsernameLikeAndEnabled("%" + keyword + "%", 1);
+        List<UserPO> byUserDisplayName = userRepository
+                .findByUserDisplayNameLikeAndEnabled("%" + keyword + "%", 1);
+        if (!CollectionUtils.isEmpty(byUsername)) {
+            users.addAll(byUsername);
+        }
+        if (!CollectionUtils.isEmpty(byUserDisplayName)) {
+            users.addAll(byUserDisplayName);
+        }
+        return users;
+    }
+
+    @Override
+    public UserInfo findByUserId(String userId) {
+        UserPO userPO = userRepository.findByUsername(userId);
+        return userPO == null ? null : userPO.toUserInfo();
+    }
+
+    @Override
+    public List<UserInfo> findByUserIds(List<String> userIds) {
+        List<UserPO> users = userRepository.findByUsernameIn(userIds);
+
+        if (CollectionUtils.isEmpty(users)) {
+            return Collections.emptyList();
+        }
+
+        return users.stream().map(UserPO::toUserInfo).collect(Collectors.toList());
+    }
 }

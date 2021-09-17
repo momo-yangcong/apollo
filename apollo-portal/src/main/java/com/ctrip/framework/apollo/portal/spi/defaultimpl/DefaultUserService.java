@@ -16,12 +16,10 @@
  */
 package com.ctrip.framework.apollo.portal.spi.defaultimpl;
 
-import com.google.common.collect.Lists;
-
 import com.ctrip.framework.apollo.portal.entity.bo.UserInfo;
 import com.ctrip.framework.apollo.portal.spi.UserService;
+import com.google.common.collect.Lists;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,33 +28,33 @@ import java.util.List;
  */
 public class DefaultUserService implements UserService {
 
-  @Override
-  public List<UserInfo> searchUsers(String keyword, int offset, int limit) {
-    return Collections.singletonList(assembleDefaultUser());
-  }
-
-  @Override
-  public UserInfo findByUserId(String userId) {
-    if (userId.equals("apollo")) {
-      return assembleDefaultUser();
+    @Override
+    public List<UserInfo> searchUsers(String keyword, int offset, int limit) {
+        return Collections.singletonList(assembleDefaultUser());
     }
-    return null;
-  }
 
-  @Override
-  public List<UserInfo> findByUserIds(List<String> userIds) {
-    if (userIds.contains("apollo")) {
-      return Lists.newArrayList(assembleDefaultUser());
+    @Override
+    public UserInfo findByUserId(String userId) {
+        if (userId.equals("apollo")) {
+            return assembleDefaultUser();
+        }
+        return null;
     }
-    return null;
-  }
 
-  private UserInfo assembleDefaultUser() {
-    UserInfo defaultUser = new UserInfo();
-    defaultUser.setUserId("apollo");
-    defaultUser.setName("apollo");
-    defaultUser.setEmail("apollo@acme.com");
+    @Override
+    public List<UserInfo> findByUserIds(List<String> userIds) {
+        if (userIds.contains("apollo")) {
+            return Lists.newArrayList(assembleDefaultUser());
+        }
+        return null;
+    }
 
-    return defaultUser;
-  }
+    private UserInfo assembleDefaultUser() {
+        UserInfo defaultUser = new UserInfo();
+        defaultUser.setUserId("apollo");
+        defaultUser.setName("apollo");
+        defaultUser.setEmail("apollo@acme.com");
+
+        return defaultUser;
+    }
 }

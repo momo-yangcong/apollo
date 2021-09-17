@@ -31,18 +31,18 @@ import org.junit.runners.JUnit4;
 @AloneWith(JUnit4.class)
 public class DeferredLoggerStateTest {
 
-  @Test
-  public void testDeferredState() {
-    Assert.assertFalse(DeferredLogger.isEnabled());
+    @Test
+    public void testDeferredState() {
+        Assert.assertFalse(DeferredLogger.isEnabled());
 
-    DeferredLogger.enable();
-    Assert.assertTrue(DeferredLogger.isEnabled());
+        DeferredLogger.enable();
+        Assert.assertTrue(DeferredLogger.isEnabled());
 
-    DeferredLogger.replayTo();
-    Assert.assertFalse(DeferredLogger.isEnabled());
+        DeferredLogger.replayTo();
+        Assert.assertFalse(DeferredLogger.isEnabled());
 
-    DeferredLogger.enable();
-    Assert.assertFalse(DeferredLogger.isEnabled());
-  }
+        DeferredLogger.enable();
+        Assert.assertFalse(DeferredLogger.isEnabled());
+    }
 
 }

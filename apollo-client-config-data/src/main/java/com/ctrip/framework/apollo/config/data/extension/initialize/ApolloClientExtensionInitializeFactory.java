@@ -32,56 +32,56 @@ import org.springframework.boot.context.properties.bind.Binder;
  */
 public class ApolloClientExtensionInitializeFactory {
 
-  private final Log log;
+    private final Log log;
 
-  private final ApolloClientPropertiesFactory apolloClientPropertiesFactory;
+    private final ApolloClientPropertiesFactory apolloClientPropertiesFactory;
 
-  private final ApolloClientLongPollingExtensionInitializer apolloClientLongPollingExtensionInitializer;
+    private final ApolloClientLongPollingExtensionInitializer apolloClientLongPollingExtensionInitializer;
 
-  private final ApolloClientWebsocketExtensionInitializer apolloClientWebsocketExtensionInitializer;
+    private final ApolloClientWebsocketExtensionInitializer apolloClientWebsocketExtensionInitializer;
 
-  public ApolloClientExtensionInitializeFactory(Log log,
-      ConfigurableBootstrapContext bootstrapContext) {
-    this.log = log;
-    this.apolloClientPropertiesFactory = new ApolloClientPropertiesFactory();
-    this.apolloClientLongPollingExtensionInitializer = new ApolloClientLongPollingExtensionInitializer(log,
-        bootstrapContext);
-    this.apolloClientWebsocketExtensionInitializer = new ApolloClientWebsocketExtensionInitializer(log,
-        bootstrapContext);
-  }
-
-  /**
-   * initialize extension
-   *
-   * @param binder      properties binder
-   * @param bindHandler properties bind handler
-   */
-  public void initializeExtension(Binder binder, BindHandler bindHandler) {
-    ApolloClientProperties apolloClientProperties = this.apolloClientPropertiesFactory
-        .createApolloClientProperties(binder, bindHandler);
-    if (apolloClientProperties == null || apolloClientProperties.getExtension() == null) {
-      this.log.info("apollo client extension is not configured, default to disabled");
-      return;
+    public ApolloClientExtensionInitializeFactory(Log log,
+                                                  ConfigurableBootstrapContext bootstrapContext) {
+        this.log = log;
+        this.apolloClientPropertiesFactory = new ApolloClientPropertiesFactory();
+        this.apolloClientLongPollingExtensionInitializer = new ApolloClientLongPollingExtensionInitializer(log,
+                bootstrapContext);
+        this.apolloClientWebsocketExtensionInitializer = new ApolloClientWebsocketExtensionInitializer(log,
+                bootstrapContext);
     }
-    ApolloClientExtensionProperties extension = apolloClientProperties.getExtension();
-    if (!extension.getEnabled()) {
-      this.log.info("apollo client extension disabled");
-      return;
+
+    /**
+     * initialize extension
+     *
+     * @param binder      properties binder
+     * @param bindHandler properties bind handler
+     */
+    public void initializeExtension(Binder binder, BindHandler bindHandler) {
+        ApolloClientProperties apolloClientProperties = this.apolloClientPropertiesFactory
+                .createApolloClientProperties(binder, bindHandler);
+        if (apolloClientProperties == null || apolloClientProperties.getExtension() == null) {
+            this.log.info("apollo client extension is not configured, default to disabled");
+            return;
+        }
+        ApolloClientExtensionProperties extension = apolloClientProperties.getExtension();
+        if (!extension.getEnabled()) {
+            this.log.info("apollo client extension disabled");
+            return;
+        }
+        ApolloClientMessagingType messagingType = extension.getMessagingType();
+        log.debug(Slf4jLogMessageFormatter
+                .format("apollo client extension messaging type: {}", messagingType));
+        switch (messagingType) {
+            case LONG_POLLING:
+                this.apolloClientLongPollingExtensionInitializer
+                        .initialize(apolloClientProperties, binder, bindHandler);
+                return;
+            case WEBSOCKET:
+                this.apolloClientWebsocketExtensionInitializer
+                        .initialize(apolloClientProperties, binder, bindHandler);
+                return;
+            default:
+                throw new IllegalStateException("Unexpected value: " + messagingType);
+        }
     }
-    ApolloClientMessagingType messagingType = extension.getMessagingType();
-    log.debug(Slf4jLogMessageFormatter
-        .format("apollo client extension messaging type: {}", messagingType));
-    switch (messagingType) {
-      case LONG_POLLING:
-        this.apolloClientLongPollingExtensionInitializer
-            .initialize(apolloClientProperties, binder, bindHandler);
-        return;
-      case WEBSOCKET:
-        this.apolloClientWebsocketExtensionInitializer
-            .initialize(apolloClientProperties, binder, bindHandler);
-        return;
-      default:
-        throw new IllegalStateException("Unexpected value: " + messagingType);
-    }
-  }
 }

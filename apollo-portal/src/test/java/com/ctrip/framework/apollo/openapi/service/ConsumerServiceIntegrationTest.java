@@ -16,30 +16,31 @@
  */
 package com.ctrip.framework.apollo.openapi.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
 import com.ctrip.framework.apollo.portal.AbstractIntegrationTest;
 import com.google.common.collect.Sets;
-import java.util.Set;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
+
+import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * @author wxq
  */
 public class ConsumerServiceIntegrationTest extends AbstractIntegrationTest {
 
-  @Autowired
-  private ConsumerService consumerService;
+    @Autowired
+    private ConsumerService consumerService;
 
-  @Test
-  @Sql(scripts = "/sql/openapi/ConsumerServiceIntegrationTest.testFindAppIdsAuthorizedByConsumerId.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-  @Sql(scripts = "/sql/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-  public void testFindAppIdsAuthorizedByConsumerId() {
-    Set<String> appIds = this.consumerService.findAppIdsAuthorizedByConsumerId(1000L);
-    assertEquals(Sets.newHashSet("consumer-test-app-id-0", "consumer-test-app-id-1"), appIds);
-    assertFalse(appIds.contains("consumer-test-app-id-2"));
-  }
+    @Test
+    @Sql(scripts = "/sql/openapi/ConsumerServiceIntegrationTest.testFindAppIdsAuthorizedByConsumerId.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = "/sql/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void testFindAppIdsAuthorizedByConsumerId() {
+        Set<String> appIds = this.consumerService.findAppIdsAuthorizedByConsumerId(1000L);
+        assertEquals(Sets.newHashSet("consumer-test-app-id-0", "consumer-test-app-id-1"), appIds);
+        assertFalse(appIds.contains("consumer-test-app-id-2"));
+    }
 }

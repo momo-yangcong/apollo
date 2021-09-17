@@ -23,25 +23,25 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
  */
 public class ApolloClientProperties {
 
-  /**
-   * extension configuration
-   */
-  @NestedConfigurationProperty
-  private ApolloClientExtensionProperties extension;
+    /**
+     * extension configuration
+     */
+    @NestedConfigurationProperty
+    private ApolloClientExtensionProperties extension;
 
-  public ApolloClientExtensionProperties getExtension() {
-    return extension;
-  }
+    public ApolloClientExtensionProperties getExtension() {
+        return extension;
+    }
 
-  public void setExtension(
-      ApolloClientExtensionProperties extension) {
-    this.extension = extension;
-  }
+    public void setExtension(
+            ApolloClientExtensionProperties extension) {
+        this.extension = extension;
+    }
 
-  @Override
-  public String toString() {
-    return "ApolloClientProperties{" +
-        "extension=" + extension +
-        '}';
-  }
+    @Override
+    public String toString() {
+        return "ApolloClientProperties{" +
+                "extension=" + extension +
+                '}';
+    }
 }

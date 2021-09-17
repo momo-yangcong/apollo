@@ -50,7 +50,7 @@ public class NacosDiscoveryService implements DiscoveryService {
     @Override
     public List<ServiceDTO> getServiceInstances(String serviceId) {
         try {
-            List<Instance> instances = namingService.selectInstances(serviceId,true);
+            List<Instance> instances = namingService.selectInstances(serviceId, true);
             List<ServiceDTO> serviceDTOList = Lists.newLinkedList();
             instances.forEach(instance -> {
                 ServiceDTO serviceDTO = this.toServiceDTO(instance, serviceId);
@@ -58,7 +58,7 @@ public class NacosDiscoveryService implements DiscoveryService {
             });
             return serviceDTOList;
         } catch (NacosException ex) {
-            logger.error(ex.getMessage(),ex);
+            logger.error(ex.getMessage(), ex);
         }
         return Collections.emptyList();
     }

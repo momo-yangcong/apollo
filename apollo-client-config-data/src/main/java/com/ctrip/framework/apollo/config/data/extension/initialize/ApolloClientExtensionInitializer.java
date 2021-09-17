@@ -25,13 +25,13 @@ import org.springframework.boot.context.properties.bind.Binder;
  */
 public interface ApolloClientExtensionInitializer {
 
-  /**
-   * initialize extension
-   *
-   * @param apolloClientProperties apollo client extension properties
-   * @param binder                 properties binder
-   * @param bindHandler            properties bind handler
-   */
-  void initialize(ApolloClientProperties apolloClientProperties, Binder binder,
-      BindHandler bindHandler);
+    /**
+     * initialize extension
+     *
+     * @param apolloClientProperties apollo client extension properties
+     * @param binder                 properties binder
+     * @param bindHandler            properties bind handler
+     */
+    void initialize(ApolloClientProperties apolloClientProperties, Binder binder,
+                    BindHandler bindHandler);
 }

@@ -16,20 +16,21 @@
  */
 package com.ctrip.framework.apollo.config.data.importer;
 
-import java.util.Collections;
 import org.springframework.core.env.MapPropertySource;
+
+import java.util.Collections;
 
 /**
  * @author vdisk <vdisk@foxmail.com>
  */
 public class ApolloConfigEmptyPropertySource extends MapPropertySource {
 
-  /**
-   * Create a new {@code EmptyPropertySource} with the given name.
-   *
-   * @param name the associated name
-   */
-  public ApolloConfigEmptyPropertySource(String name) {
-    super(name, Collections.emptyMap());
-  }
+    /**
+     * Create a new {@code EmptyPropertySource} with the given name.
+     *
+     * @param name the associated name
+     */
+    public ApolloConfigEmptyPropertySource(String name) {
+        super(name, Collections.emptyMap());
+    }
 }

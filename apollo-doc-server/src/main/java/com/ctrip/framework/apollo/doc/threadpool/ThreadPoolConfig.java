@@ -11,12 +11,11 @@ public class ThreadPoolConfig {
 
 
     @Bean
-    TaskExecutor taskExecutor(){
+    TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
         taskExecutor.setThreadFactory(new CustomizableThreadFactory("taskExecutor-"));
         return taskExecutor;
     }
-
 
 
 }

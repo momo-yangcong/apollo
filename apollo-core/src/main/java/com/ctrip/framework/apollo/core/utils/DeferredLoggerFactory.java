@@ -25,16 +25,16 @@ import org.slf4j.LoggerFactory;
  */
 public class DeferredLoggerFactory {
 
-  private DeferredLoggerFactory() {
-  }
+    private DeferredLoggerFactory() {
+    }
 
-  public static Logger getLogger(Class<?> clazz) {
-    Logger logger = LoggerFactory.getLogger(clazz);
-    return new DeferredLogger(logger);
-  }
+    public static Logger getLogger(Class<?> clazz) {
+        Logger logger = LoggerFactory.getLogger(clazz);
+        return new DeferredLogger(logger);
+    }
 
-  public static Logger getLogger(String name) {
-    Logger logger = LoggerFactory.getLogger(name);
-    return new DeferredLogger(logger);
-  }
+    public static Logger getLogger(String name) {
+        Logger logger = LoggerFactory.getLogger(name);
+        return new DeferredLogger(logger);
+    }
 }

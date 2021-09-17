@@ -16,32 +16,33 @@
  */
 package com.ctrip.framework.apollo.portal.spi.oidc;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.util.Base64;
 import java.util.concurrent.ThreadLocalRandom;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * @author vdisk <vdisk@foxmail.com>
  */
 public class PlaceholderPasswordEncoder implements PasswordEncoder {
 
-  public static final String ENCODING_ID = "placeholder";
+    public static final String ENCODING_ID = "placeholder";
 
-  /**
-   * generate a random string as a password placeholder.
-   */
-  @Override
-  public String encode(CharSequence rawPassword) {
-    byte[] bytes = new byte[32];
-    ThreadLocalRandom.current().nextBytes(bytes);
-    return Base64.getEncoder().encodeToString(bytes);
-  }
+    /**
+     * generate a random string as a password placeholder.
+     */
+    @Override
+    public String encode(CharSequence rawPassword) {
+        byte[] bytes = new byte[32];
+        ThreadLocalRandom.current().nextBytes(bytes);
+        return Base64.getEncoder().encodeToString(bytes);
+    }
 
-  /**
-   * placeholder will never matches a password
-   */
-  @Override
-  public boolean matches(CharSequence rawPassword, String encodedPassword) {
-    return false;
-  }
+    /**
+     * placeholder will never matches a password
+     */
+    @Override
+    public boolean matches(CharSequence rawPassword, String encodedPassword) {
+        return false;
+    }
 }

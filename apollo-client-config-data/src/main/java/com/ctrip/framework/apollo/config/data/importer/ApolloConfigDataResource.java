@@ -17,54 +17,55 @@
 package com.ctrip.framework.apollo.config.data.importer;
 
 import com.ctrip.framework.apollo.core.ConfigConsts;
-import java.util.Objects;
 import org.springframework.boot.context.config.ConfigDataResource;
+
+import java.util.Objects;
 
 /**
  * @author vdisk <vdisk@foxmail.com>
  */
 public class ApolloConfigDataResource extends ConfigDataResource {
 
-  /**
-   * default resource instance
-   */
-  public static final ApolloConfigDataResource DEFAULT = new ApolloConfigDataResource(
-      ConfigConsts.NAMESPACE_APPLICATION);
+    /**
+     * default resource instance
+     */
+    public static final ApolloConfigDataResource DEFAULT = new ApolloConfigDataResource(
+            ConfigConsts.NAMESPACE_APPLICATION);
 
-  /**
-   * apollo config namespace
-   */
-  private final String namespace;
+    /**
+     * apollo config namespace
+     */
+    private final String namespace;
 
-  public ApolloConfigDataResource(String namespace) {
-    this.namespace = namespace;
-  }
-
-  public String getNamespace() {
-    return namespace;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+    public ApolloConfigDataResource(String namespace) {
+        this.namespace = namespace;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    public String getNamespace() {
+        return namespace;
     }
-    ApolloConfigDataResource that = (ApolloConfigDataResource) o;
-    return Objects.equals(namespace, that.namespace);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(namespace);
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ApolloConfigDataResource that = (ApolloConfigDataResource) o;
+        return Objects.equals(namespace, that.namespace);
+    }
 
-  @Override
-  public String toString() {
-    return "ApolloConfigDataResource{" +
-        "namespace='" + namespace + '\'' +
-        '}';
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hash(namespace);
+    }
+
+    @Override
+    public String toString() {
+        return "ApolloConfigDataResource{" +
+                "namespace='" + namespace + '\'' +
+                '}';
+    }
 }

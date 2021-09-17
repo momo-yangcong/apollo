@@ -24,17 +24,17 @@ import com.ctrip.framework.apollo.portal.spi.UserService;
  */
 public interface OidcLocalUserService extends UserService {
 
-  /**
-   * create local user info related to the oidc user
-   *
-   * @param newUserInfo the oidc user's info
-   */
-  void createLocalUser(UserInfo newUserInfo);
+    /**
+     * create local user info related to the oidc user
+     *
+     * @param newUserInfo the oidc user's info
+     */
+    void createLocalUser(UserInfo newUserInfo);
 
-  /**
-   * update user's info
-   *
-   * @param newUserInfo the new user's info
-   */
-  void updateUserInfo(UserInfo newUserInfo);
+    /**
+     * update user's info
+     *
+     * @param newUserInfo the new user's info
+     */
+    void updateUserInfo(UserInfo newUserInfo);
 }

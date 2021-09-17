@@ -25,24 +25,24 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AdminServiceAutoConfiguration {
 
-  private final BizConfig bizConfig;
+    private final BizConfig bizConfig;
 
-  public AdminServiceAutoConfiguration(final BizConfig bizConfig) {
-    this.bizConfig = bizConfig;
-  }
+    public AdminServiceAutoConfiguration(final BizConfig bizConfig) {
+        this.bizConfig = bizConfig;
+    }
 
-  @Bean
-  public FilterRegistrationBean<AdminServiceAuthenticationFilter> adminServiceAuthenticationFilter() {
-    FilterRegistrationBean<AdminServiceAuthenticationFilter> filterRegistrationBean = new FilterRegistrationBean<>();
+    @Bean
+    public FilterRegistrationBean<AdminServiceAuthenticationFilter> adminServiceAuthenticationFilter() {
+        FilterRegistrationBean<AdminServiceAuthenticationFilter> filterRegistrationBean = new FilterRegistrationBean<>();
 
-    filterRegistrationBean.setFilter(new AdminServiceAuthenticationFilter(bizConfig));
-    filterRegistrationBean.addUrlPatterns("/apps/*");
-    filterRegistrationBean.addUrlPatterns("/appnamespaces/*");
-    filterRegistrationBean.addUrlPatterns("/instances/*");
-    filterRegistrationBean.addUrlPatterns("/items/*");
-    filterRegistrationBean.addUrlPatterns("/namespaces/*");
-    filterRegistrationBean.addUrlPatterns("/releases/*");
+        filterRegistrationBean.setFilter(new AdminServiceAuthenticationFilter(bizConfig));
+        filterRegistrationBean.addUrlPatterns("/apps/*");
+        filterRegistrationBean.addUrlPatterns("/appnamespaces/*");
+        filterRegistrationBean.addUrlPatterns("/instances/*");
+        filterRegistrationBean.addUrlPatterns("/items/*");
+        filterRegistrationBean.addUrlPatterns("/namespaces/*");
+        filterRegistrationBean.addUrlPatterns("/releases/*");
 
-    return filterRegistrationBean;
-  }
+        return filterRegistrationBean;
+    }
 }

@@ -17,7 +17,6 @@
 package com.ctrip.framework.apollo.adminservice.controller;
 
 import com.ctrip.framework.apollo.AdminServiceTestConfiguration;
-
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,21 +34,19 @@ import javax.annotation.PostConstruct;
 @SpringBootTest(classes = AdminServiceTestConfiguration.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 public abstract class AbstractControllerTest {
 
-  @Autowired
-  private HttpMessageConverters httpMessageConverters;
+    protected RestTemplate restTemplate = (new TestRestTemplate()).getRestTemplate();
+    @Value("${local.server.port}")
+    protected int port;
+    @Autowired
+    private HttpMessageConverters httpMessageConverters;
 
-  protected RestTemplate restTemplate = (new TestRestTemplate()).getRestTemplate();
+    @PostConstruct
+    private void postConstruct() {
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler());
+        restTemplate.setMessageConverters(httpMessageConverters.getConverters());
+    }
 
-  @PostConstruct
-  private void postConstruct() {
-    restTemplate.setErrorHandler(new DefaultResponseErrorHandler());
-    restTemplate.setMessageConverters(httpMessageConverters.getConverters());
-  }
-
-  @Value("${local.server.port}")
-  protected int port;
-
-  protected String url(String path) {
-    return "http://localhost:" + port + path;
-  }
+    protected String url(String path) {
+        return "http://localhost:" + port + path;
+    }
 }

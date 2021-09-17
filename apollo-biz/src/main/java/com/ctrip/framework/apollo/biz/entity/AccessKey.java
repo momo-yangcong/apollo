@@ -30,42 +30,42 @@ import javax.persistence.Table;
 @Where(clause = "isDeleted = 0")
 public class AccessKey extends BaseEntity {
 
-  @Column(name = "appId", nullable = false)
-  private String appId;
+    @Column(name = "appId", nullable = false)
+    private String appId;
 
-  @Column(name = "Secret", nullable = false)
-  private String secret;
+    @Column(name = "Secret", nullable = false)
+    private String secret;
 
-  @Column(name = "isEnabled", columnDefinition = "Bit default '0'")
-  private boolean enabled;
+    @Column(name = "isEnabled", columnDefinition = "Bit default '0'")
+    private boolean enabled;
 
-  public String getAppId() {
-    return appId;
-  }
+    public String getAppId() {
+        return appId;
+    }
 
-  public void setAppId(String appId) {
-    this.appId = appId;
-  }
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
-  public String getSecret() {
-    return secret;
-  }
+    public String getSecret() {
+        return secret;
+    }
 
-  public void setSecret(String secret) {
-    this.secret = secret;
-  }
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
 
-  public boolean isEnabled() {
-    return enabled;
-  }
+    public boolean isEnabled() {
+        return enabled;
+    }
 
-  public void setEnabled(boolean enabled) {
-    this.enabled = enabled;
-  }
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
-  @Override
-  public String toString() {
-    return toStringHelper().add("appId", appId).add("secret", secret)
-        .add("enabled", enabled).toString();
-  }
+    @Override
+    public String toString() {
+        return toStringHelper().add("appId", appId).add("secret", secret)
+                .add("enabled", enabled).toString();
+    }
 }

@@ -33,27 +33,27 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = ApolloClientPropertyCompatibleTestConfiguration.class,
-    webEnvironment = SpringBootTest.WebEnvironment.NONE)
+        webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @ActiveProfiles("test-compatible")
 public class ApolloClientApplicationPropertiesCompatibleTest {
 
-  @Autowired
-  private ConfigurableEnvironment environment;
+    @Autowired
+    private ConfigurableEnvironment environment;
 
-  @Test
-  public void testApplicationPropertiesCompatible() {
-    Assert.assertEquals("test-1/cacheDir",
-        this.environment.getProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR));
-    Assert.assertEquals("test-1-secret",
-        this.environment.getProperty(ApolloClientSystemConsts.APOLLO_ACCESS_KEY_SECRET));
-    Assert.assertEquals("https://test-1-config-service",
-        this.environment.getProperty(ApolloClientSystemConsts.APOLLO_CONFIG_SERVICE));
-  }
-
-  @After
-  public void clearProperty() {
-    for (String propertyName : ApolloApplicationContextInitializer.APOLLO_SYSTEM_PROPERTIES) {
-      System.clearProperty(propertyName);
+    @Test
+    public void testApplicationPropertiesCompatible() {
+        Assert.assertEquals("test-1/cacheDir",
+                this.environment.getProperty(ApolloClientSystemConsts.APOLLO_CACHE_DIR));
+        Assert.assertEquals("test-1-secret",
+                this.environment.getProperty(ApolloClientSystemConsts.APOLLO_ACCESS_KEY_SECRET));
+        Assert.assertEquals("https://test-1-config-service",
+                this.environment.getProperty(ApolloClientSystemConsts.APOLLO_CONFIG_SERVICE));
     }
-  }
+
+    @After
+    public void clearProperty() {
+        for (String propertyName : ApolloApplicationContextInitializer.APOLLO_SYSTEM_PROPERTIES) {
+            System.clearProperty(propertyName);
+        }
+    }
 }

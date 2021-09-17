@@ -21,60 +21,60 @@ import com.ctrip.framework.apollo.portal.environment.Env;
 
 public class EnvironmentInfo {
 
-  private String env;
-  private boolean active;
-  private String metaServerAddress;
+    private String env;
+    private boolean active;
+    private String metaServerAddress;
 
-  private ServiceDTO[] configServices;
-  private ServiceDTO[] adminServices;
+    private ServiceDTO[] configServices;
+    private ServiceDTO[] adminServices;
 
-  private String errorMessage;
+    private String errorMessage;
 
-  public Env getEnv() {
-    return Env.valueOf(env);
-  }
+    public Env getEnv() {
+        return Env.valueOf(env);
+    }
 
-  public void setEnv(Env env) {
-    this.env = env.toString();
-  }
+    public void setEnv(Env env) {
+        this.env = env.toString();
+    }
 
-  public boolean isActive() {
-    return active;
-  }
+    public boolean isActive() {
+        return active;
+    }
 
-  public void setActive(boolean active) {
-    this.active = active;
-  }
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
-  public String getMetaServerAddress() {
-    return metaServerAddress;
-  }
+    public String getMetaServerAddress() {
+        return metaServerAddress;
+    }
 
-  public void setMetaServerAddress(String metaServerAddress) {
-    this.metaServerAddress = metaServerAddress;
-  }
+    public void setMetaServerAddress(String metaServerAddress) {
+        this.metaServerAddress = metaServerAddress;
+    }
 
-  public ServiceDTO[] getConfigServices() {
-    return configServices;
-  }
+    public ServiceDTO[] getConfigServices() {
+        return configServices;
+    }
 
-  public void setConfigServices(ServiceDTO[] configServices) {
-    this.configServices = configServices;
-  }
+    public void setConfigServices(ServiceDTO[] configServices) {
+        this.configServices = configServices;
+    }
 
-  public ServiceDTO[] getAdminServices() {
-    return adminServices;
-  }
+    public ServiceDTO[] getAdminServices() {
+        return adminServices;
+    }
 
-  public void setAdminServices(ServiceDTO[] adminServices) {
-    this.adminServices = adminServices;
-  }
+    public void setAdminServices(ServiceDTO[] adminServices) {
+        this.adminServices = adminServices;
+    }
 
-  public String getErrorMessage() {
-    return errorMessage;
-  }
+    public String getErrorMessage() {
+        return errorMessage;
+    }
 
-  public void setErrorMessage(String errorMessage) {
-    this.errorMessage = errorMessage;
-  }
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
 }

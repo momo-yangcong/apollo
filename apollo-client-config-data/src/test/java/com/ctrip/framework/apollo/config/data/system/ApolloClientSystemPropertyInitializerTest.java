@@ -17,9 +17,6 @@
 package com.ctrip.framework.apollo.config.data.system;
 
 import com.ctrip.framework.apollo.spring.boot.ApolloApplicationContextInitializer;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.logging.LogFactory;
 import org.junit.After;
 import org.junit.Assert;
@@ -28,39 +25,43 @@ import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.boot.context.properties.source.ConfigurationPropertyName;
 import org.springframework.boot.context.properties.source.MapConfigurationPropertySource;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
+
 /**
  * @author vdisk <vdisk@foxmail.com>
  */
 public class ApolloClientSystemPropertyInitializerTest {
 
-  @Test
-  public void testSystemPropertyNames() {
-    for (String propertyName : ApolloApplicationContextInitializer.APOLLO_SYSTEM_PROPERTIES) {
-      Assert.assertTrue(ConfigurationPropertyName.isValid(propertyName));
+    @Test
+    public void testSystemPropertyNames() {
+        for (String propertyName : ApolloApplicationContextInitializer.APOLLO_SYSTEM_PROPERTIES) {
+            Assert.assertTrue(ConfigurationPropertyName.isValid(propertyName));
+        }
     }
-  }
 
-  @Test
-  public void testInitializeSystemProperty() {
-    Map<String, String> map = new LinkedHashMap<>();
-    for (String propertyName : ApolloApplicationContextInitializer.APOLLO_SYSTEM_PROPERTIES) {
-      System.clearProperty(propertyName);
-      map.put(propertyName, String.valueOf(ThreadLocalRandom.current().nextLong()));
+    @Test
+    public void testInitializeSystemProperty() {
+        Map<String, String> map = new LinkedHashMap<>();
+        for (String propertyName : ApolloApplicationContextInitializer.APOLLO_SYSTEM_PROPERTIES) {
+            System.clearProperty(propertyName);
+            map.put(propertyName, String.valueOf(ThreadLocalRandom.current().nextLong()));
+        }
+        MapConfigurationPropertySource propertySource = new MapConfigurationPropertySource(map);
+        Binder binder = new Binder(propertySource);
+        ApolloClientSystemPropertyInitializer initializer = new ApolloClientSystemPropertyInitializer(
+                LogFactory.getLog(ApolloClientSystemPropertyInitializerTest.class));
+        initializer.initializeSystemProperty(binder, null);
+        for (String propertyName : ApolloApplicationContextInitializer.APOLLO_SYSTEM_PROPERTIES) {
+            Assert.assertEquals(map.get(propertyName), System.getProperty(propertyName));
+        }
     }
-    MapConfigurationPropertySource propertySource = new MapConfigurationPropertySource(map);
-    Binder binder = new Binder(propertySource);
-    ApolloClientSystemPropertyInitializer initializer = new ApolloClientSystemPropertyInitializer(
-        LogFactory.getLog(ApolloClientSystemPropertyInitializerTest.class));
-    initializer.initializeSystemProperty(binder, null);
-    for (String propertyName : ApolloApplicationContextInitializer.APOLLO_SYSTEM_PROPERTIES) {
-      Assert.assertEquals(map.get(propertyName), System.getProperty(propertyName));
-    }
-  }
 
-  @After
-  public void clearProperty() {
-    for (String propertyName : ApolloApplicationContextInitializer.APOLLO_SYSTEM_PROPERTIES) {
-      System.clearProperty(propertyName);
+    @After
+    public void clearProperty() {
+        for (String propertyName : ApolloApplicationContextInitializer.APOLLO_SYSTEM_PROPERTIES) {
+            System.clearProperty(propertyName);
+        }
     }
-  }
 }

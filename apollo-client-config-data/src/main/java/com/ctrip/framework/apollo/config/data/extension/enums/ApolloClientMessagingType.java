@@ -21,14 +21,14 @@ package com.ctrip.framework.apollo.config.data.extension.enums;
  */
 public enum ApolloClientMessagingType {
 
-  /**
-   * long polling
-   */
-  LONG_POLLING,
+    /**
+     * long polling
+     */
+    LONG_POLLING,
 
-  /**
-   * websocket
-   */
-  WEBSOCKET,
-  ;
+    /**
+     * websocket
+     */
+    WEBSOCKET,
+    ;
 }

@@ -31,23 +31,22 @@ import javax.annotation.PostConstruct;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {
-    PortalApplication.class,
-    SkipAuthorizationConfiguration.class
+        PortalApplication.class,
+        SkipAuthorizationConfiguration.class
 }, webEnvironment = WebEnvironment.RANDOM_PORT)
 public abstract class AbstractIntegrationTest {
 
-  protected RestTemplate restTemplate = (new TestRestTemplate()).getRestTemplate();
+    protected RestTemplate restTemplate = (new TestRestTemplate()).getRestTemplate();
+    @Value("${local.server.port}")
+    int port;
 
-  @PostConstruct
-  private void postConstruct() {
-    System.setProperty("spring.profiles.active", "test");
-    restTemplate.setErrorHandler(new DefaultResponseErrorHandler());
-  }
+    @PostConstruct
+    private void postConstruct() {
+        System.setProperty("spring.profiles.active", "test");
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler());
+    }
 
-  @Value("${local.server.port}")
-  int port;
-
-  protected String url(String path) {
-    return "http://localhost:" + port + path;
-  }
+    protected String url(String path) {
+        return "http://localhost:" + port + path;
+    }
 }

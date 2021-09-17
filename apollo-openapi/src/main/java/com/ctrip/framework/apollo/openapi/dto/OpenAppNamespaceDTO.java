@@ -81,16 +81,16 @@ public class OpenAppNamespaceDTO extends BaseDTO {
     @Override
     public String toString() {
         return "OpenAppNamespaceDTO{" +
-            "name='" + name + '\'' +
-            ", appId='" + appId + '\'' +
-            ", format='" + format + '\'' +
-            ", isPublic=" + isPublic +
-            ", appendNamespacePrefix=" + appendNamespacePrefix +
-            ", comment='" + comment + '\'' +
-            ", dataChangeCreatedBy='" + dataChangeCreatedBy + '\'' +
-            ", dataChangeLastModifiedBy='" + dataChangeLastModifiedBy + '\'' +
-            ", dataChangeCreatedTime=" + dataChangeCreatedTime +
-            ", dataChangeLastModifiedTime=" + dataChangeLastModifiedTime +
-            '}';
+                "name='" + name + '\'' +
+                ", appId='" + appId + '\'' +
+                ", format='" + format + '\'' +
+                ", isPublic=" + isPublic +
+                ", appendNamespacePrefix=" + appendNamespacePrefix +
+                ", comment='" + comment + '\'' +
+                ", dataChangeCreatedBy='" + dataChangeCreatedBy + '\'' +
+                ", dataChangeLastModifiedBy='" + dataChangeLastModifiedBy + '\'' +
+                ", dataChangeCreatedTime=" + dataChangeCreatedTime +
+                ", dataChangeLastModifiedTime=" + dataChangeLastModifiedTime +
+                '}';
     }
 }

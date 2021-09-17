@@ -33,8 +33,8 @@ import org.slf4j.LoggerFactory;
 @AloneWith(JUnit4.class)
 public class DeferredLogCacheTest {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
     private static final String logMsg = "hello kl";
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Test
     public void testDeferredLogCacheMaxLogSize() {

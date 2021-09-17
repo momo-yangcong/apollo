@@ -16,8 +16,6 @@
  */
 package com.ctrip.framework.apollo.openapi.v1.controller;
 
-import static org.junit.Assert.assertEquals;
-
 import com.ctrip.framework.apollo.openapi.entity.ConsumerRole;
 import com.ctrip.framework.apollo.openapi.repository.ConsumerAuditRepository;
 import com.ctrip.framework.apollo.openapi.repository.ConsumerRepository;
@@ -37,10 +35,6 @@ import com.ctrip.framework.apollo.portal.service.RolePermissionService;
 import com.ctrip.framework.apollo.portal.spi.UserInfoHolder;
 import com.ctrip.framework.apollo.portal.spi.UserService;
 import com.google.common.collect.Sets;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -55,6 +49,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * @author wxq
  */
@@ -63,101 +64,101 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @Import(ConsumerService.class)
 public class AppControllerTest {
 
-  @Autowired
-  private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-  @MockBean
-  private PortalSettings portalSettings;
+    @MockBean
+    private PortalSettings portalSettings;
 
-  @MockBean
-  private AppService appService;
+    @MockBean
+    private AppService appService;
 
-  @MockBean
-  private ClusterService clusterService;
+    @MockBean
+    private ClusterService clusterService;
 
-  @MockBean
-  private ConsumerAuthUtil consumerAuthUtil;
+    @MockBean
+    private ConsumerAuthUtil consumerAuthUtil;
 
-  @MockBean
-  private PermissionRepository permissionRepository;
+    @MockBean
+    private PermissionRepository permissionRepository;
 
-  @MockBean
-  private RolePermissionRepository rolePermissionRepository;
+    @MockBean
+    private RolePermissionRepository rolePermissionRepository;
 
-  @MockBean
-  private UserInfoHolder userInfoHolder;
-  @MockBean
-  private ConsumerTokenRepository consumerTokenRepository;
-  @MockBean
-  private ConsumerRepository consumerRepository;
-  @MockBean
-  private ConsumerAuditRepository consumerAuditRepository;
-  @MockBean
-  private ConsumerRoleRepository consumerRoleRepository;
-  @MockBean
-  private PortalConfig portalConfig;
-  @MockBean
-  private RolePermissionService rolePermissionService;
-  @MockBean
-  private UserService userService;
-  @MockBean
-  private RoleRepository roleRepository;
+    @MockBean
+    private UserInfoHolder userInfoHolder;
+    @MockBean
+    private ConsumerTokenRepository consumerTokenRepository;
+    @MockBean
+    private ConsumerRepository consumerRepository;
+    @MockBean
+    private ConsumerAuditRepository consumerAuditRepository;
+    @MockBean
+    private ConsumerRoleRepository consumerRoleRepository;
+    @MockBean
+    private PortalConfig portalConfig;
+    @MockBean
+    private RolePermissionService rolePermissionService;
+    @MockBean
+    private UserService userService;
+    @MockBean
+    private RoleRepository roleRepository;
 
-  @Test
-  public void testFindAppsAuthorized() throws Exception {
-    final long consumerId = 123456;
-    Mockito.when(this.consumerAuthUtil.retrieveConsumerId(Mockito.any())).thenReturn(consumerId);
+    private static ConsumerRole generateConsumerRoleByRoleId(long roleId) {
+        ConsumerRole consumerRole = new ConsumerRole();
+        consumerRole.setRoleId(roleId);
+        return consumerRole;
+    }
 
-    final List<ConsumerRole> consumerRoles = Arrays.asList(
-        generateConsumerRoleByRoleId(6),
-        generateConsumerRoleByRoleId(7),
-        generateConsumerRoleByRoleId(8)
-    );
-    Mockito.when(this.consumerRoleRepository.findByConsumerId(consumerId))
-        .thenReturn(consumerRoles);
+    private static Role generateRoleByIdAndRoleName(long id, String roleName) {
+        Role role = new Role();
+        role.setId(id);
+        role.setRoleName(roleName);
+        return role;
+    }
 
-    Mockito.when(this.roleRepository.findAllById(Mockito.any())).thenAnswer(invocation -> {
-      Set<Role> roles = new HashSet<>();
-      Iterable<Long> roleIds = invocation.getArgument(0);
-      for (Long roleId : roleIds) {
-        if (roleId == 6) {
-          roles.add(generateRoleByIdAndRoleName(6, "ModifyNamespace+app1+application+DEV"));
-        }
-        if (roleId == 7) {
-          roles.add(generateRoleByIdAndRoleName(7, "ReleaseNamespace+app1+application+DEV"));
-        }
-        if (roleId == 8) {
-          roles.add(generateRoleByIdAndRoleName(8, "Master+app2"));
-        }
-      }
-      assertEquals(3, roles.size());
-      return roles;
-    });
+    @Test
+    public void testFindAppsAuthorized() throws Exception {
+        final long consumerId = 123456;
+        Mockito.when(this.consumerAuthUtil.retrieveConsumerId(Mockito.any())).thenReturn(consumerId);
 
-    this.mockMvc.perform(MockMvcRequestBuilders.get("/openapi/v1/apps/authorized"))
-        .andDo(MockMvcResultHandlers.print())
-        .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+        final List<ConsumerRole> consumerRoles = Arrays.asList(
+                generateConsumerRoleByRoleId(6),
+                generateConsumerRoleByRoleId(7),
+                generateConsumerRoleByRoleId(8)
+        );
+        Mockito.when(this.consumerRoleRepository.findByConsumerId(consumerId))
+                .thenReturn(consumerRoles);
 
-    Mockito.verify(this.consumerRoleRepository, Mockito.times(1)).findByConsumerId(consumerId);
-    Mockito.verify(this.roleRepository, Mockito.times(1)).findAllById(Mockito.any());
+        Mockito.when(this.roleRepository.findAllById(Mockito.any())).thenAnswer(invocation -> {
+            Set<Role> roles = new HashSet<>();
+            Iterable<Long> roleIds = invocation.getArgument(0);
+            for (Long roleId : roleIds) {
+                if (roleId == 6) {
+                    roles.add(generateRoleByIdAndRoleName(6, "ModifyNamespace+app1+application+DEV"));
+                }
+                if (roleId == 7) {
+                    roles.add(generateRoleByIdAndRoleName(7, "ReleaseNamespace+app1+application+DEV"));
+                }
+                if (roleId == 8) {
+                    roles.add(generateRoleByIdAndRoleName(8, "Master+app2"));
+                }
+            }
+            assertEquals(3, roles.size());
+            return roles;
+        });
 
-    ArgumentCaptor<Set<String>> appIdsCaptor = ArgumentCaptor.forClass(Set.class);
-    Mockito.verify(this.appService).findByAppIds(appIdsCaptor.capture());
-    Set<String> appIds = appIdsCaptor.getValue();
-    assertEquals(Sets.newHashSet("app1", "app2"), appIds);
-  }
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/openapi/v1/apps/authorized"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
 
-  private static ConsumerRole generateConsumerRoleByRoleId(long roleId) {
-    ConsumerRole consumerRole = new ConsumerRole();
-    consumerRole.setRoleId(roleId);
-    return consumerRole;
-  }
+        Mockito.verify(this.consumerRoleRepository, Mockito.times(1)).findByConsumerId(consumerId);
+        Mockito.verify(this.roleRepository, Mockito.times(1)).findAllById(Mockito.any());
 
-  private static Role generateRoleByIdAndRoleName(long id, String roleName) {
-    Role role = new Role();
-    role.setId(id);
-    role.setRoleName(roleName);
-    return role;
-  }
+        ArgumentCaptor<Set<String>> appIdsCaptor = ArgumentCaptor.forClass(Set.class);
+        Mockito.verify(this.appService).findByAppIds(appIdsCaptor.capture());
+        Set<String> appIds = appIdsCaptor.getValue();
+        assertEquals(Sets.newHashSet("app1", "app2"), appIds);
+    }
 
 }
